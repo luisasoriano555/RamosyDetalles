@@ -1024,7 +1024,13 @@
                             <span id="product-modal-old" class="text-lg text-gray-400 line-through"></span>
                             <span id="product-modal-disc" class="bg-magenta-100 text-magenta-700 text-xs font-bold px-2 py-1 rounded-full"></span>
                         </div>
-                        <p class="text-xs text-gray-400 mb-5">Unidad de medida: Único</p>
+                        <p id="product-unit-note" class="text-xs text-gray-400 mb-5">Unidad de medida: Único</p>
+
+                        <!-- Selector de tonos / colores -->
+                        <div id="product-shades-wrap" class="mb-5 hidden">
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Color: <span id="product-shade-name" class="font-normal text-magenta-600"></span></p>
+                            <div id="product-shades" class="flex flex-wrap gap-2"></div>
+                        </div>
 
                         <!-- Detalles -->
                         <div class="bg-magenta-50 rounded-xl p-4 mb-5">
@@ -1121,6 +1127,56 @@
                     ['Unidad mínima mayoristas', '1'],
                     ['Cantidad por display', 'Display por 12 unidades'],
                     ['Ingredientes', 'PARAFFINUM LIQUIDUM, ETHYLHEXYL PALMITATE, HYDROGENATED POLY(C6-20 OLEFIN), HYDROGENATED STYRENE/ISOPRENE COPOLYMER, POLYISOBUTENE, SILICA DIMETHYL SILYLATE, PHENOXYETHANOL (0.50%), PARFUM, PUEDE CONTENER CI 77891, CI 77491, CI 77492, CI 77499, CI 15985, CI 45410, CI 15850.'],
+                ],
+                group: 'best',
+            },
+            {
+                id: 13,
+                type: 'beauty',
+                name: 'Base Aura Trendy Ref',
+                category: 'Maquillaje · Rostro',
+                desc: 'Lucir un maquillaje de piel impecable sin sensación grasa ni pesada es posible. Consigue una piel de apariencia uniforme con la Base Aura Trendy, una base de maquillaje de cobertura media y construible que se adapta a diferentes estilos. Su textura cremosa y fácil de difuminar te permite crear desde un maquillaje natural para todos los días hasta un look de mayor cobertura. Su acabado semimate ayuda a controlar visualmente el brillo y deja una apariencia suave y uniforme. Su fórmula ofrece una sensación ligera y cómoda, especialmente adecuada para pieles mixtas y grasas. Encuentra tu tono ideal entre sus 9 opciones. ¡Tu piel, tu estilo y la cobertura que quieres!',
+                detail: 'Contenido: 40 ml · Acabado semimate · Cobertura media-alta · Registro Invima: NSOC35478-24CO',
+                price: 25000,
+                unitNote: 'Mililitro a $750,00',
+                icon: 'fa-droplet',
+                grad: 'from-nude-200 to-nude-400',
+                images: [
+                    'images/base-aura-1.webp',
+                    'images/base-aura-2.webp',
+                    'images/base-aura-3.webp',
+                    'images/base-aura-4.webp',
+                ],
+                shades: [
+                    { name: 'Tono 00', color: '#f3d9c4' },
+                    { name: 'Tono 01', color: '#eccaad' },
+                    { name: 'Tono 02', color: '#e4b596' },
+                    { name: 'Tono 03', color: '#d9a784' },
+                    { name: 'Tono 04', color: '#cf9872' },
+                    { name: 'Tono 05', color: '#c08a62' },
+                    { name: 'Tono 06', color: '#a9754f' },
+                    { name: 'Tono 07', color: '#8f5f3e' },
+                    { name: 'Tono 08', color: '#744b30' },
+                ],
+                benefits: [
+                    'Textura ligera y acuosa con acabado mate y cobertura modulable.',
+                    'Se difumina fácilmente y tiene excelente duración.',
+                    'No deja sensación grasa, pesada ni pegajosa.',
+                ],
+                specs: [
+                    ['Tipo de piel', 'Todo tipo de piel'],
+                    ['Acabado', 'Semi mate'],
+                    ['Fórmula cosmética', 'Líquida'],
+                    ['Cobertura', 'Media - alta'],
+                    ['Contenido', '40 ml'],
+                    ['Modo de uso', 'Aplica pequeñas cantidades sobre el rostro y difumina uniformemente con brocha o esponja. Puedes construir la cobertura según el resultado que busques.'],
+                    ['Cuidados', 'Mantén el envase bien cerrado después de cada uso. Guárdalo en un lugar fresco y seco, alejado del calor y la luz directa.'],
+                    ['Advertencias', 'Uso externo únicamente — solo para rostro. Evitar contacto con ojos. Realizar prueba de parche antes del primer uso si tienes piel sensible. Suspender si hay irritación.'],
+                    ['Registro Invima', 'NSOC35478-24CO'],
+                    ['Garantía', '30 días'],
+                    ['Unidad mínima mayoristas', '1'],
+                    ['Cantidad por display', 'Display por 12 unidades'],
+                    ['Ingredientes', 'AQUA, PARAFFINUM LIQUIDUM, GLYCERIN, MICA, CYCLOPENTASILOXANE (4.0%), ETHYLHEXYL PALMITATE, SORBITAN SESQUIOLEATE, ISODODECANE, DIMETHICONE, CETYL PEG/PPG-10/1 DIMETHICONE, MAGNESIUM STEARATE, MAGNESIUM SULFATE, PHENOXYETHANOL (0.72%), PARFUM, ETHYLHEXYLGLYCERIN, PUEDE CONTENER CI 77891, CI 77492, CI 77491, CI 77499.'],
                 ],
                 group: 'best',
             },
@@ -1849,6 +1905,7 @@
         let pmQty = 1;
         let pmImages = [];   // lista de vistas (foto o ícono) del producto actual
         let pmIndex = 0;
+        let pmShade = null;  // tono seleccionado (si el producto tiene shades)
 
         /* ---- Calificación por estrellas (guardada por producto) ---- */
         const RATINGS_KEY = 'ryd_ratings';
@@ -1972,6 +2029,29 @@
             pmDesc.textContent = p.desc || '';
             pmDetail.textContent = p.detail || '';
 
+            // Nota de unidad (ej. "Mililitro a $750")
+            document.getElementById('product-unit-note').textContent = p.unitNote || 'Unidad de medida: Único';
+
+            // Tonos / colores
+            const shadesWrap = document.getElementById('product-shades-wrap');
+            const shadesEl = document.getElementById('product-shades');
+            const shadeNameEl = document.getElementById('product-shade-name');
+            if (Array.isArray(p.shades) && p.shades.length) {
+                pmShade = p.shades[0].name;
+                shadeNameEl.textContent = pmShade;
+                shadesEl.innerHTML = p.shades
+                    .map(
+                        (s, i) => `
+                        <button class="product-shade w-9 h-9 rounded-full border-2 ${i === 0 ? 'border-magenta-600 ring-2 ring-magenta-200' : 'border-white'} shadow transition hover:scale-110"
+                                style="background:${s.color}" title="${s.name}" data-name="${s.name}"></button>`
+                    )
+                    .join('');
+                shadesWrap.classList.remove('hidden');
+            } else {
+                pmShade = null;
+                shadesWrap.classList.add('hidden');
+            }
+
             // Beneficios
             const benWrap = document.getElementById('product-benefits');
             const benList = document.getElementById('product-benefits-list');
@@ -2071,6 +2151,21 @@
             if (t) stageGo(Number(t.dataset.i));
         });
 
+        /* ---- Selección de tono/color ---- */
+        document.getElementById('product-shades').addEventListener('click', (e) => {
+            const s = e.target.closest('.product-shade');
+            if (!s) return;
+            pmShade = s.dataset.name;
+            document.getElementById('product-shade-name').textContent = pmShade;
+            [...e.currentTarget.children].forEach((b) => {
+                const on = b === s;
+                b.classList.toggle('border-magenta-600', on);
+                b.classList.toggle('ring-2', on);
+                b.classList.toggle('ring-magenta-200', on);
+                b.classList.toggle('border-white', !on);
+            });
+        });
+
         /* ---- Cantidad ---- */
         document.getElementById('product-qty-minus').addEventListener('click', () => {
             pmQty = Math.max(1, pmQty - 1); pmQtyEl.textContent = pmQty;
@@ -2100,7 +2195,8 @@
         pmBuy.addEventListener('click', () => {
             if (currentProductId == null) return;
             const p = byId(currentProductId);
-            const txt = `¡Hola Ramos y Detalles! 💖 Quiero comprar:%0A%0A${encodeURIComponent(`${pmQty} x ${p.name} — ${money(p.price * pmQty)}`)}%0A%0A${encodeURIComponent('¿Me ayudan a finalizar la compra? 😊')}`;
+            const shadeTxt = pmShade ? ` (${pmShade})` : '';
+            const txt = `¡Hola Ramos y Detalles! 💖 Quiero comprar:%0A%0A${encodeURIComponent(`${pmQty} x ${p.name}${shadeTxt} — ${money(p.price * pmQty)}`)}%0A%0A${encodeURIComponent('¿Me ayudan a finalizar la compra? 😊')}`;
             window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${txt}`, '_blank');
         });
 
