@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ramos y Detalles · Maquillaje, Skincare & Dulces</title>
+    <meta name="description" content="Ramos y Detalles: tienda de maquillaje, skincare y dulces. Arma el regalo perfecto. Estilo revista, diseño limpio y femenino." />
+
+    <!-- Tailwind CSS vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    />
+
+    <!-- Configuración de Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                        script: ['"Dancing Script"', 'cursive'],
+                        garamond: ['"Cormorant Garamond"', 'serif'],
+                    },
+                    colors: {
+                        magenta: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                        },
+                        nude: {
+                            50: '#faf6f3',
+                            100: '#f3e9e2',
+                            200: '#e8d4c7',
+                            300: '#dbb9a4',
+                            400: '#c99a7e',
+                            500: '#b87e5f',
+                        },
+                    },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                    },
+                    animation: {
+                        marquee: 'marquee 22s linear infinite',
+                        fadeUp: 'fadeUp 0.6s ease forwards',
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        :root {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        h1, h2, h3, .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* ----- Scrollbar personalizado ----- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdf2f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f9a8d4;
+            border-radius: 20px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ec4899;
+        }
+
+        /* ----- Zoom en imagen de producto ----- */
+        .product-img-wrap {
+            overflow: hidden;
+        }
+        .product-img-wrap img {
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-card:hover .product-img-wrap img {
+            transform: scale(1.12);
+        }
+
+        /* ----- Botón "Añadir" que aparece en hover ----- */
+        .quick-add {
+            transform: translateY(120%);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .product-card:hover .quick-add {
+            transform: translateY(0);
+        }
+
+        /* ----- Overlay del carrito ----- */
+        #cart-overlay {
+            transition: opacity 0.4s ease;
+        }
+        #cart-drawer {
+            transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* ----- Slider del hero ----- */
+        .slide {
+            opacity: 0;
+            transition: opacity 0.9s ease;
+            pointer-events: none;
+        }
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ----- Efecto revista (catálogo) ----- */
+        .magazine-page {
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+        .magazine-page:hover {
+            transform: rotateY(-10deg) translateX(-6px);
+            box-shadow: -20px 20px 40px rgba(190, 24, 93, 0.25);
+        }
+
+        /* ----- Mini animación al añadir ----- */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+        .pop {
+            animation: pop 0.35s ease;
+        }
+
+        /* ----- Toast ----- */
+        #toast {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-white text-gray-800 antialiased">
+
+    <!-- ============================================================= -->
+    <!-- 1. TOP BAR (Barra superior de anuncios)                       -->
+    <!-- ============================================================= -->
+    <div class="bg-gradient-to-r from-magenta-600 via-magenta-500 to-magenta-600 text-white text-xs sm:text-sm">
+        <div class="max-w-7xl mx-auto flex items-center justify-between px-4 py-2">
+            <!-- Marquee de anuncios -->
+            <div class="flex-1 overflow-hidden">
+                <div class="flex whitespace-nowrap animate-marquee gap-10 font-light tracking-wide">
+                    <span><i class="fa-solid fa-truck-fast mr-2"></i>Envío GRATIS en compras superiores a $150.000</span>
+                    <span><i class="fa-solid fa-gift mr-2"></i>Recibe una muestra de regalo en tu primer pedido</span>
+                    <span><i class="fa-solid fa-star mr-2"></i>Nueva colección de labiales mate ya disponible</span>
+                    <span><i class="fa-solid fa-candy-cane mr-2"></i>Dulces importados: ¡antójate!</span>
+                    <!-- Duplicado para loop continuo -->
+                    <span><i class="fa-solid fa-truck-fast mr-2"></i>Envío GRATIS en compras superiores a $150.000</span>
+                    <span><i class="fa-solid fa-gift mr-2"></i>Recibe una muestra de regalo en tu primer pedido</span>
+                    <span><i class="fa-solid fa-star mr-2"></i>Nueva colección de labiales mate ya disponible</span>
+                    <span><i class="fa-solid fa-candy-cane mr-2"></i>Dulces importados: ¡antójate!</span>
+                </div>
+            </div>
+
+            <!-- Selector de región -->
+            <div class="hidden md:flex items-center gap-4 pl-6 shrink-0">
+                <button class="flex items-center gap-2 hover:text-magenta-100 transition">
+                    <i class="fa-solid fa-earth-americas"></i>
+                    <span>Colombia (COP)</span>
+                    <i class="fa-solid fa-chevron-down text-[10px]"></i>
+                </button>
+                <a href="#" class="hover:text-magenta-100 transition"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="hover:text-magenta-100 transition"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- HEADER PRINCIPAL                                               -->
+    <!-- ============================================================= -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-magenta-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between gap-4 py-4">
+
+                <!-- Botón menú móvil -->
+                <button id="mobile-menu-btn" class="lg:hidden text-2xl text-magenta-700" aria-label="Abrir menú">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                <!-- Logo (imagen con respaldo tipográfico si no existe logo.png) -->
+                <a href="#" class="flex items-center gap-2 shrink-0">
+                    <img src="logo.png" alt="Ramos y Detalles"
+                         class="h-12 sm:h-14 w-auto object-contain"
+                         onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />
+                    <span class="hidden flex-col items-start leading-none">
+                        <span class="font-script text-3xl sm:text-4xl font-bold text-magenta-700 tracking-tight leading-none">Ramos y Detalles</span>
+                        <span class="hidden sm:inline-block text-[9px] uppercase tracking-[0.42em] text-nude-500 mt-1 ml-1">Maquillaje · Skincare · Dulces</span>
+                    </span>
+                </a>
+
+                <!-- Buscador central -->
+                <div class="hidden md:flex flex-1 max-w-xl mx-4">
+                    <div class="relative w-full">
+                        <input
+                            type="text"
+                            placeholder="Buscar labiales, serums, dulces..."
+                            class="w-full rounded-full border border-magenta-200 bg-magenta-50/40 pl-5 pr-12 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300 transition"
+                        />
+                        <button class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-magenta-600 hover:bg-magenta-700 text-white w-9 h-9 rounded-full flex items-center justify-center transition">
+                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Iconos de acciones -->
+                <div class="flex items-center gap-4 sm:gap-6 text-magenta-700">
+                    <button class="md:hidden text-xl" aria-label="Buscar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                    <button id="account-btn" class="hidden sm:flex flex-col items-center text-xs hover:text-magenta-500 transition" aria-label="Mi cuenta">
+                        <i class="fa-regular fa-user text-xl"></i>
+                        <span id="account-label" class="mt-0.5 hidden lg:block">Cuenta</span>
+                    </button>
+
+                    <button id="fav-btn" class="relative flex flex-col items-center text-xs hover:text-magenta-500 transition" aria-label="Favoritos">
+                        <i class="fa-regular fa-heart text-xl"></i>
+                        <span class="mt-0.5 hidden lg:block">Favoritos</span>
+                        <span id="fav-count" class="absolute -top-2 -right-2 bg-magenta-500 text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center font-semibold">0</span>
+                    </button>
+
+                    <!-- Carrito -->
+                    <button id="cart-btn" class="relative flex flex-col items-center text-xs hover:text-magenta-500 transition" aria-label="Abrir carrito">
+                        <i class="fa-solid fa-bag-shopping text-xl"></i>
+                        <span class="mt-0.5 hidden lg:block">Carrito</span>
+                        <span id="cart-count" class="absolute -top-2 -right-2 bg-magenta-600 text-white text-[10px] min-w-[18px] h-[18px] px-1 rounded-full flex items-center justify-center font-semibold">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Buscador móvil -->
+            <div class="md:hidden pb-4">
+                <div class="relative w-full">
+                    <input
+                        type="text"
+                        placeholder="Buscar productos..."
+                        class="w-full rounded-full border border-magenta-200 bg-magenta-50/40 pl-5 pr-12 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300"
+                    />
+                    <button class="absolute right-1.5 top-1/2 -translate-y-1/2 bg-magenta-600 text-white w-9 h-9 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- 1.3 MENÚ DE CATEGORÍAS (desktop)                          -->
+        <!-- ========================================================= -->
+        <nav class="hidden lg:block border-t border-magenta-100 bg-white">
+            <ul class="max-w-7xl mx-auto px-4 flex items-center justify-center gap-10 text-sm font-medium text-gray-700">
+                <li><a href="#rostro" class="block py-3 hover:text-magenta-600 border-b-2 border-transparent hover:border-magenta-500 transition">Maquillaje</a></li>
+                <li><a href="#skincare" class="block py-3 hover:text-magenta-600 border-b-2 border-transparent hover:border-magenta-500 transition">Skincare</a></li>
+                <li><a href="#dulces" class="block py-3 hover:text-magenta-600 border-b-2 border-transparent hover:border-magenta-500 transition">Dulces &amp; Antojos</a></li>
+                <li><a href="#ofertas" class="block py-3 text-magenta-600 font-semibold hover:text-magenta-700 border-b-2 border-transparent hover:border-magenta-500 transition">Ofertas <i class="fa-solid fa-fire ml-1 text-xs"></i></a></li>
+                <li><a href="#catalogo" class="block py-3 hover:text-magenta-600 border-b-2 border-transparent hover:border-magenta-500 transition">Catálogo</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- ========================================================= -->
+    <!-- MENÚ MÓVIL (off-canvas)                                    -->
+    <!-- ========================================================= -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/40 z-50 hidden"></div>
+    <aside id="mobile-menu" class="fixed top-0 left-0 h-full w-72 max-w-[80%] bg-white z-50 shadow-2xl -translate-x-full transition-transform duration-500 ease-out">
+        <div class="flex items-center justify-between p-5 border-b border-magenta-100">
+            <span class="flex items-center gap-2">
+                <img src="logo.png" alt="Ramos y Detalles" class="h-10 w-auto object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';" />
+                <span class="hidden font-script text-3xl font-bold text-magenta-700 leading-none">Ramos y Detalles</span>
+            </span>
+            <button id="mobile-menu-close" class="text-2xl text-gray-500 hover:text-magenta-600" aria-label="Cerrar menú">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <ul class="p-5 flex flex-col gap-1 text-gray-700 font-medium">
+            <li><a href="#rostro" class="mobile-link flex items-center justify-between py-3 px-3 rounded-lg hover:bg-magenta-50 transition">Maquillaje <i class="fa-solid fa-chevron-right text-xs text-magenta-400"></i></a></li>
+            <li><a href="#skincare" class="mobile-link flex items-center justify-between py-3 px-3 rounded-lg hover:bg-magenta-50 transition">Skincare <i class="fa-solid fa-chevron-right text-xs text-magenta-400"></i></a></li>
+            <li><a href="#dulces" class="mobile-link flex items-center justify-between py-3 px-3 rounded-lg hover:bg-magenta-50 transition">Dulces &amp; Antojos <i class="fa-solid fa-chevron-right text-xs text-magenta-400"></i></a></li>
+            <li><a href="#ofertas" class="mobile-link flex items-center justify-between py-3 px-3 rounded-lg hover:bg-magenta-50 text-magenta-600 font-semibold transition">Ofertas <i class="fa-solid fa-fire text-xs"></i></a></li>
+            <li><a href="#catalogo" class="mobile-link flex items-center justify-between py-3 px-3 rounded-lg hover:bg-magenta-50 transition">Catálogo <i class="fa-solid fa-chevron-right text-xs text-magenta-400"></i></a></li>
+        </ul>
+        <div class="p-5 mt-auto border-t border-magenta-100 space-y-3">
+            <button id="mobile-account" class="flex items-center gap-3 text-sm text-gray-600 hover:text-magenta-600 w-full"><i class="fa-regular fa-user"></i> Mi cuenta</button>
+            <button id="mobile-fav" class="flex items-center gap-3 text-sm text-gray-600 hover:text-magenta-600 w-full"><i class="fa-regular fa-heart"></i> Favoritos</button>
+            <div class="flex gap-4 pt-2 text-magenta-600 text-lg">
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="#" class="js-whatsapp-link"><i class="fa-brands fa-whatsapp"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ============================================================= -->
+    <!-- 2. HERO SECTION / BANNER PRINCIPAL (Slider estilo revista)    -->
+    <!-- ============================================================= -->
+    <section class="relative">
+        <div class="relative h-[480px] sm:h-[560px] lg:h-[640px] overflow-hidden">
+
+            <!-- Slide 1 -->
+            <div class="slide active absolute inset-0">
+                <div class="h-full w-full bg-gradient-to-br from-magenta-100 via-nude-50 to-magenta-200"></div>
+                <div class="absolute inset-0 flex items-center">
+                    <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-8 items-center">
+                        <div class="animate-fadeUp">
+                            <p class="uppercase tracking-[0.35em] text-magenta-600 text-xs sm:text-sm mb-4">Nueva colección</p>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-magenta-800 leading-tight mb-5">
+                                Tu belleza,<br /><span class="italic text-magenta-600">tu ritual diario</span>
+                            </h1>
+                            <p class="text-gray-600 max-w-md mb-8 text-base sm:text-lg">
+                                Maquillaje de alta pigmentación y skincare que ama tu piel. Descubre el glow que mereces.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#best-sellers" class="bg-magenta-600 hover:bg-magenta-700 text-white px-8 py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition">
+                                    Comprar ahora
+                                </a>
+                                <a href="#catalogo" class="bg-white/80 backdrop-blur text-magenta-700 border border-magenta-300 px-8 py-3.5 rounded-full font-semibold hover:bg-white transition">
+                                    Ver catálogo
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden lg:flex justify-center">
+                            <div class="relative">
+                                <div class="w-72 h-96 rounded-[3rem] bg-gradient-to-b from-magenta-300 to-magenta-500 shadow-2xl flex items-center justify-center text-white text-8xl rotate-3">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div class="absolute -bottom-6 -left-10 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3">
+                                    <span class="text-3xl text-magenta-500"><i class="fa-solid fa-truck-fast"></i></span>
+                                    <div class="text-left">
+                                        <p class="text-sm font-semibold text-gray-800">Envío gratis</p>
+                                        <p class="text-xs text-gray-500">en compras +$150.000</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide absolute inset-0">
+                <div class="h-full w-full bg-gradient-to-br from-nude-100 via-nude-50 to-magenta-100"></div>
+                <div class="absolute inset-0 flex items-center">
+                    <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p class="uppercase tracking-[0.35em] text-nude-500 text-xs sm:text-sm mb-4">Skincare routine</p>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-nude-500 leading-tight mb-5">
+                                Piel sana,<br /><span class="italic text-magenta-600">piel feliz</span>
+                            </h1>
+                            <p class="text-gray-600 max-w-md mb-8 text-base sm:text-lg">
+                                Serums, cremas e hidratantes con ingredientes activos. Cuida tu piel como se merece.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#skincare" class="bg-nude-500 hover:bg-nude-400 text-white px-8 py-3.5 rounded-full font-semibold shadow-lg transition">
+                                    Descubrir skincare
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden lg:flex justify-center">
+                            <div class="w-72 h-96 rounded-[3rem] bg-gradient-to-b from-nude-200 to-nude-400 shadow-2xl flex items-center justify-center text-white text-8xl -rotate-3">
+                                <i class="fa-solid fa-droplet"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide absolute inset-0">
+                <div class="h-full w-full bg-gradient-to-br from-magenta-200 via-magenta-100 to-pink-50"></div>
+                <div class="absolute inset-0 flex items-center">
+                    <div class="max-w-7xl w-full mx-auto px-6 lg:px-10 grid lg:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <p class="uppercase tracking-[0.35em] text-magenta-600 text-xs sm:text-sm mb-4">Zona dulce</p>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-magenta-800 leading-tight mb-5">
+                                Antójate,<br /><span class="italic text-magenta-600">sin culpa</span>
+                            </h1>
+                            <p class="text-gray-600 max-w-md mb-8 text-base sm:text-lg">
+                                Dulces importados, gomitas gourmet y chocolates que endulzan tu día de belleza.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="#dulces" class="bg-magenta-500 hover:bg-magenta-600 text-white px-8 py-3.5 rounded-full font-semibold shadow-lg transition">
+                                    Ver dulces
+                                </a>
+                            </div>
+                        </div>
+                        <div class="hidden lg:flex justify-center">
+                            <div class="w-72 h-96 rounded-[3rem] bg-gradient-to-b from-pink-300 to-magenta-400 shadow-2xl flex items-center justify-center text-white text-8xl rotate-2">
+                                <i class="fa-solid fa-candy-cane"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controles del slider -->
+            <button id="prev-slide" class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-magenta-700 w-11 h-11 rounded-full shadow flex items-center justify-center transition z-10" aria-label="Anterior">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button id="next-slide" class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 hover:bg-white text-magenta-700 w-11 h-11 rounded-full shadow flex items-center justify-center transition z-10" aria-label="Siguiente">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <!-- Puntos del slider -->
+            <div id="slide-dots" class="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
+                <button class="dot w-3 h-3 rounded-full bg-magenta-600" data-slide="0"></button>
+                <button class="dot w-3 h-3 rounded-full bg-white/70" data-slide="1"></button>
+                <button class="dot w-3 h-3 rounded-full bg-white/70" data-slide="2"></button>
+            </div>
+        </div>
+
+        <!-- Franja de beneficios -->
+        <div class="bg-magenta-700 text-white">
+            <div class="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 divide-x divide-magenta-500/50">
+                <div class="flex items-center justify-center gap-3 py-4 px-2 text-center text-xs sm:text-sm">
+                    <i class="fa-solid fa-truck-fast text-lg"></i><span>Envío a todo el país</span>
+                </div>
+                <div class="flex items-center justify-center gap-3 py-4 px-2 text-center text-xs sm:text-sm">
+                    <i class="fa-solid fa-credit-card text-lg"></i><span>Paga a cuotas</span>
+                </div>
+                <div class="flex items-center justify-center gap-3 py-4 px-2 text-center text-xs sm:text-sm">
+                    <i class="fa-solid fa-leaf text-lg"></i><span>Cruelty free</span>
+                </div>
+                <button class="open-advisor flex items-center justify-center gap-3 py-4 px-2 text-center text-xs sm:text-sm w-full hover:bg-magenta-600/40 transition">
+                    <i class="fa-solid fa-headset text-lg"></i><span>Asesoría de belleza</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 3. GRID DE CATEGORÍAS DESTACADAS                              -->
+    <!-- ============================================================= -->
+    <section class="max-w-7xl mx-auto px-4 py-16">
+        <div class="text-center mb-10">
+            <h2 class="font-serif text-2xl sm:text-3xl font-bold text-magenta-600">ELIGE UNA CATEGORÍA</h2>
+        </div>
+
+        <!-- Fila de categorías circulares (estilo revista) -->
+        <div class="flex flex-wrap justify-center gap-10 sm:gap-16">
+
+            <!-- Maquillaje -->
+            <a href="#best-sellers" class="group flex flex-col items-center w-36 sm:w-44">
+                <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden shadow-md group-hover:shadow-xl ring-4 ring-magenta-100 group-hover:ring-magenta-300 transition">
+                    <img src="images/cat-maquillaje.png" alt="Maquillaje"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='images/cat-maquillaje.svg';}else{this.style.display='none';this.nextElementSibling.style.display='flex';}" />
+                    <div class="w-full h-full bg-gradient-to-br from-magenta-300 to-magenta-500 items-center justify-center text-white text-5xl hidden">
+                        <i class="fa-solid fa-wand-sparkles"></i>
+                    </div>
+                </div>
+                <span class="mt-4 text-base sm:text-lg font-semibold text-gray-700 group-hover:text-magenta-600 transition text-center">Maquillaje</span>
+            </a>
+
+            <!-- Skincare -->
+            <a href="#skincare" class="group flex flex-col items-center w-36 sm:w-44">
+                <div class="relative w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden shadow-md group-hover:shadow-xl ring-4 ring-magenta-100 group-hover:ring-magenta-300 transition">
+                    <img src="images/cat-skincare.png" alt="Skincare"
+                         class="w-full h-full object-cover group-hover:scale-110 transition duration-500"
+                         onerror="if(!this.dataset.fb){this.dataset.fb=1;this.src='images/cat-skincare.svg';}else{this.style.display='none';this.nextElementSibling.style.display='flex';}" />
+                    <div class="w-full h-full bg-gradient-to-br from-emerald-200 to-teal-400 items-center justify-center text-white text-5xl hidden">
+                        <i class="fa-solid fa-spa"></i>
+                    </div>
+                </div>
+                <span class="mt-4 text-base sm:text-lg font-semibold text-gray-700 group-hover:text-magenta-600 transition text-center">Skincare</span>
+            </a>
+
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 4. BEST SELLERS                                               -->
+    <!-- ============================================================= -->
+    <section id="best-sellers" class="bg-magenta-50/50 py-16">
+        <div id="rostro" class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10 flex-wrap gap-4">
+                <div>
+                    <p class="uppercase tracking-[0.3em] text-magenta-500 text-xs mb-3">Lo más vendido</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-800">Best Sellers</h2>
+                </div>
+                <a href="#catalogo" class="text-magenta-600 font-semibold hover:text-magenta-700 flex items-center gap-2">
+                    Ver todos <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <!-- Grid de productos (se inyecta por JS) -->
+            <div id="bestsellers-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 5. CATÁLOGO DIGITAL (banner estilo revista)                   -->
+    <!-- ============================================================= -->
+    <section id="catalogo" class="py-20 bg-gradient-to-br from-magenta-700 via-magenta-600 to-magenta-800 text-white overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <p class="uppercase tracking-[0.35em] text-magenta-200 text-xs mb-4">Experiencia Ramos y Detalles</p>
+                <h2 class="text-4xl sm:text-5xl font-bold leading-tight mb-6">
+                    Hojea nuestro<br /><span class="italic text-magenta-200">catálogo digital</span>
+                </h2>
+                <p class="text-magenta-100 max-w-md mb-8 text-lg">
+                    Descubre tendencias, tips de belleza y nuestras colecciones como si tuvieras una revista entre tus manos. Interactivo, inspirador y 100% online.
+                </p>
+                <button id="open-catalog" class="bg-white text-magenta-700 px-8 py-3.5 rounded-full font-semibold shadow-lg hover:bg-magenta-50 transition inline-flex items-center gap-3">
+                    <i class="fa-solid fa-book-open"></i> Hojear revista digital
+                </button>
+                <p class="text-magenta-200 text-sm mt-4"><i class="fa-solid fa-hand-pointer mr-1"></i> Haz clic en cualquier producto dentro de la revista para ver su detalle.</p>
+            </div>
+
+            <!-- Simulación de revista -->
+            <div class="flex justify-center" style="perspective: 1500px;">
+                <div class="flex">
+                    <!-- Página izquierda -->
+                    <div class="magazine-page w-44 sm:w-56 h-60 sm:h-80 bg-gradient-to-b from-nude-100 to-nude-200 rounded-l-2xl shadow-2xl p-5 flex flex-col justify-between origin-right">
+                        <div>
+                            <p class="text-magenta-600 text-xs uppercase tracking-widest">Edición Primavera</p>
+                            <h3 class="text-magenta-800 text-xl font-bold mt-2">Glow<br />natural</h3>
+                        </div>
+                        <div class="text-magenta-400 text-4xl self-end"><i class="fa-solid fa-feather"></i></div>
+                    </div>
+                    <!-- Página derecha -->
+                    <div class="w-44 sm:w-56 h-60 sm:h-80 bg-white rounded-r-2xl shadow-2xl p-5 flex flex-col justify-between">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="h-16 rounded-lg bg-magenta-100 flex items-center justify-center text-magenta-400 text-2xl"><i class="fa-solid fa-wand-sparkles"></i></div>
+                            <div class="h-16 rounded-lg bg-nude-100 flex items-center justify-center text-nude-400 text-2xl"><i class="fa-solid fa-droplet"></i></div>
+                            <div class="h-16 rounded-lg bg-pink-100 flex items-center justify-center text-pink-400 text-2xl"><i class="fa-solid fa-heart"></i></div>
+                            <div class="h-16 rounded-lg bg-magenta-50 flex items-center justify-center text-magenta-400 text-2xl"><i class="fa-solid fa-star"></i></div>
+                        </div>
+                        <p class="text-gray-500 text-xs text-center">Páginas 12 – 13 · Tendencias 2026</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 6. NOVEDADES / SKINCARE & DULCES                              -->
+    <!-- ============================================================= -->
+    <section id="skincare" class="py-16">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-end justify-between mb-10 flex-wrap gap-4">
+                <div>
+                    <p class="uppercase tracking-[0.3em] text-magenta-500 text-xs mb-3">Recién llegados</p>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-800">Novedades · Skincare &amp; Dulces</h2>
+                </div>
+                <a href="#ofertas" class="text-magenta-600 font-semibold hover:text-magenta-700 flex items-center gap-2">
+                    Ver ofertas <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div id="dulces"></div>
+            <!-- Grid de novedades (se inyecta por JS) -->
+            <div id="novedades-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- BANNER OFERTAS                                                 -->
+    <!-- ============================================================= -->
+    <section id="ofertas" class="max-w-7xl mx-auto px-4 pb-16">
+        <div class="rounded-3xl bg-gradient-to-r from-magenta-500 to-pink-500 text-white p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+            <div class="text-center sm:text-left">
+                <p class="uppercase tracking-[0.3em] text-magenta-100 text-xs mb-2">Solo por hoy</p>
+                <h2 class="text-3xl sm:text-4xl font-bold mb-2">Hasta 40% OFF</h2>
+                <p class="text-magenta-100">En labiales, serums seleccionados y dulces gourmet.</p>
+            </div>
+            <a href="#best-sellers" class="bg-white text-magenta-700 px-8 py-3.5 rounded-full font-semibold shadow hover:bg-magenta-50 transition whitespace-nowrap">
+                Aprovechar ahora
+            </a>
+        </div>
+    </section>
+
+    <!-- ============================================================= -->
+    <!-- 7. FOOTER                                                     -->
+    <!-- ============================================================= -->
+    <footer class="bg-gray-900 text-gray-300">
+        <!-- Newsletter -->
+        <div class="bg-magenta-700">
+            <div class="max-w-7xl mx-auto px-4 py-12 grid lg:grid-cols-2 gap-8 items-center">
+                <div class="text-white">
+                    <h3 class="text-2xl sm:text-3xl font-bold mb-2">Únete al club Ramos y Detalles 💖</h3>
+                    <p class="text-magenta-100">Recibe ofertas exclusivas, tips de belleza y un 10% en tu primera compra.</p>
+                </div>
+                <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3">
+                    <input
+                        type="email"
+                        required
+                        placeholder="Tu correo electrónico"
+                        class="flex-1 rounded-full px-5 py-3.5 text-gray-800 focus:outline-none focus:ring-2 focus:ring-magenta-300"
+                    />
+                    <button type="submit" class="bg-white text-magenta-700 px-8 py-3.5 rounded-full font-semibold hover:bg-magenta-50 transition">
+                        Suscribirme
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Enlaces -->
+        <div class="max-w-7xl mx-auto px-4 py-14 grid grid-cols-2 lg:grid-cols-5 gap-8">
+            <div class="col-span-2 lg:col-span-1">
+                <span class="flex items-center gap-2">
+                    <img src="logo.png" alt="Ramos y Detalles" class="h-12 w-auto object-contain bg-white/90 rounded-lg p-1" onerror="this.style.display='none';this.nextElementSibling.style.display='inline';" />
+                    <span class="hidden font-script text-3xl font-bold text-white leading-none">Ramos y Detalles</span>
+                </span>
+                <p class="text-sm text-gray-400 mt-4 leading-relaxed">
+                    Tu tienda de maquillaje, skincare y dulces. Belleza consciente, resultados reales.
+                </p>
+                <div class="flex gap-4 mt-5 text-lg">
+                    <a href="#" class="hover:text-magenta-400 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-magenta-400 transition"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="hover:text-magenta-400 transition"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" class="hover:text-magenta-400 transition js-whatsapp-link"><i class="fa-brands fa-whatsapp"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold mb-4">Tienda</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#rostro" class="hover:text-magenta-400 transition">Maquillaje</a></li>
+                    <li><a href="#skincare" class="hover:text-magenta-400 transition">Skincare</a></li>
+                    <li><a href="#dulces" class="hover:text-magenta-400 transition">Dulces & Antojos</a></li>
+                    <li><a href="#ofertas" class="hover:text-magenta-400 transition">Ofertas</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold mb-4">Ayuda</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-magenta-400 transition">Centro de ayuda</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Estado de mi pedido</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Guía de tallas</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Contáctanos</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold mb-4">Políticas</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-magenta-400 transition">Devoluciones y cambios</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Envíos y entregas</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Términos y condiciones</a></li>
+                    <li><a href="#" class="hover:text-magenta-400 transition">Privacidad</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-semibold mb-4">Métodos de pago</h4>
+                <div class="grid grid-cols-3 gap-2 text-2xl text-gray-400">
+                    <i class="fa-brands fa-cc-visa hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-mastercard hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-amex hover:text-white transition"></i>
+                    <i class="fa-brands fa-cc-paypal hover:text-white transition"></i>
+                    <i class="fa-solid fa-money-bill-wave hover:text-white transition"></i>
+                    <i class="fa-solid fa-building-columns hover:text-white transition"></i>
+                </div>
+                <p class="text-xs text-gray-500 mt-4">Compra 100% segura y protegida.</p>
+            </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+                <p>© 2026 Ramos y Detalles. Todos los derechos reservados.</p>
+                <p>Hecho con <i class="fa-solid fa-heart text-magenta-500"></i> para amantes de la belleza.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ============================================================= -->
+    <!-- CARRITO (DRAWER LATERAL)                                       -->
+    <!-- ============================================================= -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none"></div>
+
+    <aside id="cart-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl translate-x-full flex flex-col">
+        <!-- Header del carrito -->
+        <div class="flex items-center justify-between p-5 border-b border-magenta-100 bg-magenta-50">
+            <h3 class="text-xl font-bold text-magenta-700 flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping"></i> Tu carrito
+                <span id="cart-item-total" class="text-sm font-normal text-gray-500">(0)</span>
+            </h3>
+            <button id="cart-close" class="text-2xl text-gray-500 hover:text-magenta-600 transition" aria-label="Cerrar carrito">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Items + sugerencia de dulces -->
+        <div class="flex-1 overflow-y-auto">
+            <div id="cart-items" class="p-5 space-y-4"></div>
+
+            <!-- Sugerencia: añade un dulce (upsell) -->
+            <div id="candy-suggest" class="hidden mx-5 mb-5 rounded-2xl bg-gradient-to-br from-pink-50 to-magenta-50 border border-magenta-100 p-4">
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="text-magenta-500 text-lg"><i class="fa-solid fa-candy-cane"></i></span>
+                    <h4 class="text-sm font-bold text-magenta-700">¿Le agregas un dulce? 🍫</h4>
+                </div>
+                <p class="text-xs text-gray-500 mb-4">Acompaña tu regalo con un detalle dulce y queda como un(a) campeón(a). 💝</p>
+                <div id="candy-suggest-list" class="space-y-3"></div>
+            </div>
+        </div>
+
+        <!-- Carrito vacío -->
+        <div id="cart-empty" class="flex-1 flex flex-col items-center justify-center text-center p-8 gap-4">
+            <div class="w-24 h-24 rounded-full bg-magenta-50 flex items-center justify-center text-magenta-300 text-4xl">
+                <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <p class="text-gray-500">Tu carrito está vacío.<br />¡Es momento de consentirte! 💄</p>
+            <button id="cart-continue" class="text-magenta-600 font-semibold hover:text-magenta-700">Seguir comprando</button>
+        </div>
+
+        <!-- Footer del carrito -->
+        <div id="cart-footer" class="border-t border-magenta-100 p-5 space-y-4 hidden">
+            <div class="flex items-center justify-between text-sm text-gray-600">
+                <span>Subtotal</span>
+                <span id="cart-subtotal" class="font-semibold text-gray-800">$0</span>
+            </div>
+            <div class="flex items-center justify-between text-sm text-gray-600">
+                <span>Envío</span>
+                <span id="cart-shipping" class="font-medium text-emerald-600">Gratis</span>
+            </div>
+            <div class="flex items-center justify-between text-lg font-bold text-gray-800 pt-2 border-t border-dashed border-magenta-100">
+                <span>Total</span>
+                <span id="cart-total" class="text-magenta-700">$0</span>
+            </div>
+            <button id="checkout-btn" class="w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white py-4 rounded-full font-semibold shadow-lg shadow-green-200 transition flex items-center justify-center gap-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Confirmar pedido por WhatsApp
+            </button>
+            <p class="text-xs text-center text-gray-400">Confirmamos stock, dirección y pago contigo por chat 💬</p>
+        </div>
+    </aside>
+
+    <!-- ============================================================= -->
+    <!-- MODAL DE CUENTA (Registro / Inicio de sesión · Club)          -->
+    <!-- ============================================================= -->
+    <div id="account-modal" class="fixed inset-0 bg-black/70 z-[80] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full relative overflow-hidden max-h-[92vh] overflow-y-auto">
+            <button id="account-close" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 text-gray-500 hover:text-magenta-600 flex items-center justify-center shadow transition" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Encabezado -->
+            <div class="bg-gradient-to-br from-magenta-500 to-magenta-700 text-white p-6 text-center">
+                <div class="text-3xl mb-2"><i class="fa-solid fa-crown"></i></div>
+                <h3 class="font-script text-3xl font-bold leading-none">Club Ramos y Detalles</h3>
+                <p class="text-magenta-100 text-sm mt-2">Ofertas exclusivas, favoritos y 10% en tu primera compra 💖</p>
+            </div>
+
+            <!-- Pestañas -->
+            <div class="flex border-b border-magenta-100">
+                <button id="tab-login" class="account-tab flex-1 py-3 text-sm font-semibold text-magenta-700 border-b-2 border-magenta-600">Iniciar sesión</button>
+                <button id="tab-register" class="account-tab flex-1 py-3 text-sm font-semibold text-gray-400 border-b-2 border-transparent">Crear cuenta</button>
+            </div>
+
+            <div class="p-6">
+                <!-- Formulario LOGIN -->
+                <form id="login-form" class="space-y-4">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Correo electrónico</label>
+                        <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" class="mt-1 w-full rounded-xl border border-magenta-200 bg-magenta-50/40 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Contraseña</label>
+                        <input type="password" name="password" required placeholder="••••••••" class="mt-1 w-full rounded-xl border border-magenta-200 bg-magenta-50/40 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+                    </div>
+                    <p id="login-error" class="text-xs text-red-500 hidden"></p>
+                    <button type="submit" class="w-full bg-magenta-600 hover:bg-magenta-700 text-white py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition">
+                        Entrar a mi cuenta
+                    </button>
+                    <p class="text-center text-xs text-gray-400">¿No tienes cuenta? <button type="button" id="goto-register" class="text-magenta-600 font-semibold">Regístrate gratis</button></p>
+                </form>
+
+                <!-- Formulario REGISTRO -->
+                <form id="register-form" class="space-y-4 hidden">
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Nombre completo</label>
+                        <input type="text" name="name" required placeholder="Tu nombre" class="mt-1 w-full rounded-xl border border-magenta-200 bg-magenta-50/40 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Correo electrónico</label>
+                        <input type="email" name="email" required placeholder="tucorreo@ejemplo.com" class="mt-1 w-full rounded-xl border border-magenta-200 bg-magenta-50/40 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+                    </div>
+                    <div>
+                        <label class="text-xs font-semibold text-gray-600">Contraseña</label>
+                        <input type="password" name="password" required minlength="4" placeholder="Mínimo 4 caracteres" class="mt-1 w-full rounded-xl border border-magenta-200 bg-magenta-50/40 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+                    </div>
+                    <p id="register-error" class="text-xs text-red-500 hidden"></p>
+                    <button type="submit" class="w-full bg-magenta-600 hover:bg-magenta-700 text-white py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition">
+                        Crear mi cuenta del club
+                    </button>
+                    <p class="text-center text-xs text-gray-400">Al registrarte aceptas nuestros términos y la política de privacidad.</p>
+                </form>
+
+                <!-- Vista de sesión iniciada -->
+                <div id="account-logged" class="hidden text-center space-y-4">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-magenta-100 text-magenta-600 text-3xl flex items-center justify-center">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Hola de nuevo,</p>
+                        <p id="account-username" class="text-xl font-bold text-gray-800"></p>
+                        <p id="account-useremail" class="text-xs text-gray-400"></p>
+                    </div>
+                    <div class="bg-magenta-50 rounded-xl p-4 text-left text-sm text-gray-600">
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-crown text-magenta-500"></i> Miembro del Club Ramos y Detalles</p>
+                        <p class="flex items-center gap-2 mt-2"><i class="fa-solid fa-heart text-magenta-500"></i> <span id="account-fav-count">0</span> producto(s) en favoritos</p>
+                    </div>
+                    <button id="logout-btn" class="w-full border border-magenta-400 text-magenta-600 hover:bg-magenta-50 py-3 rounded-full font-semibold transition">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- DRAWER DE FAVORITOS (por usuario)                             -->
+    <!-- ============================================================= -->
+    <div id="fav-overlay" class="fixed inset-0 bg-black/50 z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+    <aside id="fav-drawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl translate-x-full transition-transform duration-500 ease-out flex flex-col">
+        <div class="flex items-center justify-between p-5 border-b border-magenta-100 bg-magenta-50">
+            <h3 class="text-xl font-bold text-magenta-700 flex items-center gap-2">
+                <i class="fa-solid fa-heart"></i> Tus favoritos
+            </h3>
+            <button id="fav-close" class="text-2xl text-gray-500 hover:text-magenta-600 transition" aria-label="Cerrar favoritos">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="fav-list" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+        <div id="fav-empty" class="flex-1 flex flex-col items-center justify-center text-center p-8 gap-4">
+            <div class="w-24 h-24 rounded-full bg-magenta-50 flex items-center justify-center text-magenta-300 text-4xl">
+                <i class="fa-regular fa-heart"></i>
+            </div>
+            <p id="fav-empty-text" class="text-gray-500">Aún no tienes favoritos.<br />¡Guarda tus productos preferidos! 💕</p>
+        </div>
+    </aside>
+
+    <!-- ============================================================= -->
+    <!-- CHAT DE ASESORÍA DE BELLEZA (integrado en la página)          -->
+    <!-- ============================================================= -->
+    <button id="advisor-fab" class="open-advisor fixed bottom-24 right-6 z-[55] w-14 h-14 rounded-full bg-magenta-600 hover:bg-magenta-700 text-white text-2xl flex items-center justify-center shadow-xl shadow-magenta-300/50 transition hover:scale-110" aria-label="Abrir asesoría de belleza">
+        <i class="fa-solid fa-comments"></i>
+    </button>
+
+    <div id="advisor-chat" class="fixed bottom-6 right-6 z-[65] w-[92vw] max-w-sm bg-white rounded-2xl shadow-2xl border border-magenta-100 hidden flex-col overflow-hidden" style="height: 70vh; max-height: 540px;">
+        <!-- Header del chat -->
+        <div class="bg-gradient-to-r from-magenta-600 to-magenta-700 text-white p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-lg"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <div>
+                    <p class="font-semibold leading-tight">Asesora de Belleza</p>
+                    <p class="text-[11px] text-magenta-100 flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span> En línea</p>
+                </div>
+            </div>
+            <button id="advisor-close" class="text-xl hover:text-magenta-200 transition" aria-label="Cerrar chat"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <!-- Mensajes -->
+        <div id="advisor-messages" class="flex-1 overflow-y-auto p-4 space-y-3 bg-magenta-50/40 text-sm"></div>
+        <!-- Sugerencias rápidas -->
+        <div id="advisor-quick" class="px-3 pt-2 flex flex-wrap gap-2 bg-white"></div>
+        <!-- Input -->
+        <form id="advisor-form" class="p-3 border-t border-magenta-100 flex items-center gap-2 bg-white">
+            <input id="advisor-input" type="text" autocomplete="off" placeholder="Escribe tu pregunta de belleza..." class="flex-1 rounded-full border border-magenta-200 bg-magenta-50/40 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-magenta-300" />
+            <button type="submit" class="w-10 h-10 rounded-full bg-magenta-600 hover:bg-magenta-700 text-white flex items-center justify-center transition shrink-0" aria-label="Enviar">
+                <i class="fa-solid fa-paper-plane text-sm"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Botón flotante de WhatsApp (SOLO COMPRAS / pedidos) -->
+    <a id="whatsapp-float" href="#" target="_blank" rel="noopener"
+       class="group fixed bottom-6 right-6 z-[55] flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1ebe5d] text-white shadow-xl shadow-green-300/50 transition hover:scale-105 pl-4 pr-5 py-3"
+       aria-label="Pedidos y compras por WhatsApp">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        <span class="text-sm font-semibold hidden sm:inline">Compras</span>
+    </a>
+
+    <!-- Toast de notificación -->
+    <div id="toast" class="fixed bottom-24 left-1/2 -translate-x-1/2 translate-y-24 opacity-0 bg-gray-900 text-white px-6 py-3 rounded-full shadow-xl z-[60] flex items-center gap-3 text-sm">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-text">Producto añadido</span>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- LECTOR DE REVISTA DIGITAL (pantalla completa, funcional)      -->
+    <!-- ============================================================= -->
+    <div id="catalog-modal" class="fixed inset-0 bg-magenta-900/95 backdrop-blur-sm z-[70] hidden flex-col">
+        <!-- Barra superior del lector -->
+        <div class="flex items-center justify-between px-4 sm:px-6 py-4 text-white shrink-0">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-book-open text-magenta-200"></i>
+                <span class="font-script font-bold text-2xl leading-none">Ramos y Detalles</span>
+                <span class="hidden sm:inline text-magenta-200 text-sm">· Edición 2026</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="catalog-page-indicator" class="text-sm text-magenta-200"></span>
+                <button id="catalog-close" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xl transition" aria-label="Cerrar revista">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Área de páginas -->
+        <div class="flex-1 overflow-hidden relative flex items-center justify-center px-2 sm:px-4">
+            <!-- Flecha anterior -->
+            <button id="catalog-prev" class="absolute left-2 sm:left-6 z-10 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-magenta-700 flex items-center justify-center shadow-lg transition disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Página anterior">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+
+            <!-- Contenedor de la página (se inyecta por JS) -->
+            <div id="catalog-page" class="w-full max-w-5xl h-full py-4 overflow-y-auto"></div>
+
+            <!-- Flecha siguiente -->
+            <button id="catalog-next" class="absolute right-2 sm:right-6 z-10 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-magenta-700 flex items-center justify-center shadow-lg transition disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Página siguiente">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Navegación inferior (miniaturas de páginas) -->
+        <div id="catalog-dots" class="flex items-center justify-center gap-2 py-4 shrink-0"></div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- MODAL DE DETALLE DE PRODUCTO (Quick View)                     -->
+    <!-- ============================================================= -->
+    <div id="product-modal" class="fixed inset-0 bg-black/70 z-[80] hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full relative overflow-hidden max-h-[90vh] flex flex-col sm:flex-row">
+            <button id="product-close" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 text-gray-500 hover:text-magenta-600 flex items-center justify-center shadow transition" aria-label="Cerrar">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Imagen -->
+            <div id="product-modal-img" class="sm:w-1/2 h-56 sm:h-auto flex items-center justify-center text-white text-7xl shrink-0">
+                <i class="fa-solid fa-wand-sparkles"></i>
+            </div>
+
+            <!-- Info -->
+            <div class="sm:w-1/2 p-6 sm:p-8 overflow-y-auto">
+                <p id="product-modal-cat" class="text-[11px] uppercase tracking-wider text-magenta-500 mb-2"></p>
+                <h3 id="product-modal-name" class="text-xl sm:text-2xl font-bold text-gray-800 mb-3"></h3>
+                <div class="flex items-center gap-3 mb-4">
+                    <span id="product-modal-price" class="text-2xl font-bold text-magenta-700"></span>
+                    <span id="product-modal-old" class="text-base text-gray-400 line-through"></span>
+                    <span id="product-modal-disc" class="bg-magenta-100 text-magenta-700 text-xs font-bold px-2 py-1 rounded-full"></span>
+                </div>
+                <p id="product-modal-desc" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
+                <div class="bg-magenta-50 rounded-xl p-4 mb-6">
+                    <p class="text-xs font-semibold text-magenta-700 uppercase tracking-wide mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Detalles</p>
+                    <p id="product-modal-detail" class="text-sm text-gray-600"></p>
+                </div>
+                <button id="product-modal-add" class="w-full bg-magenta-600 hover:bg-magenta-700 text-white py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-bag-shopping"></i> Añadir al carrito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================= -->
+    <!-- JAVASCRIPT                                                    -->
+    <!-- ============================================================= -->
+    <script>
+        /* =========================================================
+           DATOS DE PRODUCTOS
+        ========================================================= */
+        const products = [
+            // --- BEST SELLERS ---
+            {
+                id: 1,
+                type: 'beauty',
+                name: 'Labial Mate Líquido "Rosa Vino"',
+                category: 'Maquillaje · Labios',
+                desc: 'Labial líquido de acabado mate aterciopelado, larga duración hasta 12 horas. No reseca y no transfiere.',
+                detail: 'Tono: Rosa Vino · Contenido: 5 ml · Vegano · Cruelty free',
+                price: 39900,
+                oldPrice: 55900,
+                discount: 29,
+                icon: 'fa-wand-sparkles',
+                grad: 'from-magenta-300 to-magenta-500',
+                group: 'best',
+            },
+            {
+                id: 2,
+                type: 'beauty',
+                name: 'Base Fluida Cobertura Total HD',
+                category: 'Maquillaje · Rostro',
+                desc: 'Base de cobertura total con acabado natural HD. Difumina imperfecciones y controla el brillo todo el día.',
+                detail: 'Cobertura: Alta · Acabado: Natural mate · Contenido: 30 ml · 12 tonos disponibles',
+                price: 68900,
+                oldPrice: 89900,
+                discount: 23,
+                icon: 'fa-palette',
+                grad: 'from-nude-200 to-nude-400',
+                group: 'best',
+            },
+            {
+                id: 3,
+                type: 'beauty',
+                name: 'Máscara de Pestañas Volumen Extremo',
+                category: 'Maquillaje · Ojos',
+                desc: 'Máscara de pestañas de volumen y alargamiento extremo. Fórmula a prueba de agua que no se corre.',
+                detail: 'Efecto: Volumen + alargamiento · Waterproof · Cepillo moldeador · 10 ml',
+                price: 42500,
+                oldPrice: 49900,
+                discount: 15,
+                icon: 'fa-eye',
+                grad: 'from-gray-700 to-gray-900',
+                group: 'best',
+            },
+            {
+                id: 4,
+                type: 'beauty',
+                name: 'Paleta de Sombras "Sunset Glow" 12 tonos',
+                category: 'Maquillaje · Ojos',
+                desc: 'Paleta de 12 sombras en tonos cálidos tipo atardecer, entre mate y shimmer. Alta pigmentación.',
+                detail: '12 tonos · Mate + shimmer · Alta pigmentación · Incluye espejo',
+                price: 72900,
+                oldPrice: 95000,
+                discount: 23,
+                icon: 'fa-star',
+                grad: 'from-pink-300 to-rose-500',
+                group: 'best',
+            },
+            {
+                id: 5,
+                type: 'beauty',
+                name: 'Rubor en Polvo "Peach Blush"',
+                category: 'Maquillaje · Rostro',
+                desc: 'Rubor en polvo sedoso tono durazno para un rubor natural y luminoso que dura todo el día.',
+                detail: 'Tono: Peach · Acabado satinado · 6 g · Fácil de difuminar',
+                price: 31900,
+                oldPrice: 39900,
+                discount: 20,
+                icon: 'fa-circle',
+                grad: 'from-rose-200 to-pink-400',
+                group: 'best',
+            },
+            {
+                id: 6,
+                type: 'beauty',
+                name: 'Iluminador Líquido "Gold Drops"',
+                category: 'Maquillaje · Rostro',
+                desc: 'Iluminador líquido con micro-partículas doradas para un glow natural. Úsalo solo o mezclado con tu base.',
+                detail: 'Tono: Gold · Formato líquido · 15 ml · Multiusos rostro y cuerpo',
+                price: 45900,
+                oldPrice: 59900,
+                discount: 23,
+                icon: 'fa-droplet',
+                grad: 'from-amber-200 to-yellow-400',
+                group: 'best',
+            },
+
+            // --- NOVEDADES: SKINCARE & DULCES ---
+            {
+                id: 7,
+                type: 'beauty',
+                name: 'Serum Vitamina C + Ácido Hialurónico 30ml',
+                category: 'Skincare · Tratamiento',
+                desc: 'Serum antioxidante con Vitamina C al 15% + Ácido Hialurónico. Ilumina, unifica el tono y aporta hidratación profunda.',
+                detail: 'Vitamina C 15% + AH · 30 ml · Uso diario AM · Para todo tipo de piel',
+                price: 78900,
+                oldPrice: 99900,
+                discount: 21,
+                icon: 'fa-droplet',
+                grad: 'from-amber-100 to-orange-300',
+                group: 'nov',
+            },
+            {
+                id: 8,
+                type: 'beauty',
+                name: 'Crema Hidratante Facial con Niacinamida',
+                category: 'Skincare · Hidratación',
+                desc: 'Crema hidratante facial con Niacinamida que fortalece la barrera cutánea, controla el sebo y afina el poro.',
+                detail: 'Niacinamida 5% · 50 ml · Textura gel-crema · Oil free',
+                price: 54900,
+                oldPrice: 69900,
+                discount: 21,
+                icon: 'fa-jar',
+                grad: 'from-teal-100 to-emerald-300',
+                group: 'nov',
+            },
+            {
+                id: 9,
+                type: 'beauty',
+                name: 'Protector Solar FPS 50+ Toque Seco',
+                category: 'Skincare · Protección',
+                desc: 'Protector solar facial FPS 50+ de toque seco. Protección alta UVA/UVB sin dejar residuo blanco ni grasoso.',
+                detail: 'FPS 50+ · Toque seco · 50 ml · Base de maquillaje ideal',
+                price: 62900,
+                oldPrice: 74900,
+                discount: 16,
+                icon: 'fa-sun',
+                grad: 'from-sky-200 to-blue-400',
+                group: 'nov',
+            },
+            {
+                id: 10,
+                type: 'candy',
+                name: 'Gomitas Gourmet de Frutos Rojos 150g',
+                category: 'Dulces · Gomitas',
+                desc: 'Gomitas gourmet artesanales sabor frutos rojos, con jugo natural y textura suave. El antojo perfecto.',
+                detail: 'Sabor: Frutos rojos · 150 g · Sin colorantes artificiales',
+                price: 18900,
+                oldPrice: 24900,
+                discount: 24,
+                icon: 'fa-candy-cane',
+                grad: 'from-red-300 to-rose-500',
+                group: 'nov',
+            },
+            {
+                id: 11,
+                type: 'candy',
+                name: 'Chocolate Belga Relleno de Avellana 100g',
+                category: 'Dulces · Chocolate',
+                desc: 'Chocolate belga fino relleno de crema de avellana. Intenso, cremoso y perfecto para consentir.',
+                detail: 'Chocolate belga · Relleno avellana · 100 g · Edición premium',
+                price: 27900,
+                oldPrice: 34900,
+                discount: 20,
+                icon: 'fa-cookie-bite',
+                grad: 'from-amber-700 to-yellow-900',
+                group: 'nov',
+            },
+            {
+                id: 12,
+                type: 'candy',
+                name: 'Caja Surtida de Macarons Franceses x6',
+                category: 'Dulces · Repostería',
+                desc: 'Caja surtida de 6 macarons franceses en sabores variados. Delicados, crujientes por fuera y suaves por dentro.',
+                detail: '6 unidades · Sabores surtidos · Repostería francesa · Caja regalo',
+                price: 38900,
+                oldPrice: 45900,
+                discount: 15,
+                icon: 'fa-ice-cream',
+                grad: 'from-pink-200 to-fuchsia-400',
+                group: 'nov',
+            },
+        ];
+
+        /* =========================================================
+           UTILIDADES
+        ========================================================= */
+        const money = (v) =>
+            '$' + v.toLocaleString('es-CO', { minimumFractionDigits: 0 });
+
+        /* =========================================================
+           RENDER DE TARJETAS DE PRODUCTO
+        ========================================================= */
+        function productCard(p) {
+            return `
+            <article class="product-card group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col">
+                <div class="relative">
+                    <div class="product-img-wrap view-product h-48 sm:h-56 bg-gradient-to-br ${p.grad} flex items-center justify-center cursor-pointer" data-id="${p.id}" title="Ver detalle">
+                        <img src="data:image/svg+xml;utf8,${encodeURIComponent(svgIcon(p.icon))}" alt="${p.name}" class="w-24 h-24 opacity-90 pointer-events-none" />
+                    </div>
+                    ${p.discount ? `<span class="absolute top-3 left-3 bg-magenta-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">-${p.discount}%</span>` : ''}
+                    <button class="fav-btn absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 text-magenta-500 flex items-center justify-center shadow hover:bg-magenta-500 hover:text-white transition" data-id="${p.id}" aria-label="Favorito">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <button class="quick-add absolute bottom-0 inset-x-0 bg-magenta-600 hover:bg-magenta-700 text-white py-3 text-sm font-semibold flex items-center justify-center gap-2" data-id="${p.id}">
+                        <i class="fa-solid fa-bag-shopping"></i> Añadir al carrito
+                    </button>
+                </div>
+                <div class="p-4 flex flex-col flex-1">
+                    <p class="text-[11px] uppercase tracking-wider text-magenta-500 mb-1">${p.category}</p>
+                    <h3 class="view-product text-sm font-medium text-gray-800 leading-snug mb-3 flex-1 cursor-pointer hover:text-magenta-600 transition" data-id="${p.id}">${p.name}</h3>
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-lg font-bold text-gray-900">${money(p.price)}</span>
+                        ${p.oldPrice ? `<span class="text-sm text-gray-400 line-through">${money(p.oldPrice)}</span>` : ''}
+                    </div>
+                    <button class="add-btn w-full border border-magenta-500 text-magenta-600 hover:bg-magenta-600 hover:text-white rounded-full py-2.5 text-sm font-semibold transition flex items-center justify-center gap-2" data-id="${p.id}">
+                        <i class="fa-solid fa-plus"></i> Añadir
+                    </button>
+                </div>
+            </article>`;
+        }
+
+        /* SVG inline simple para las "imágenes" (evita dependencias externas) */
+        function svgIcon() {
+            return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="rgba(255,255,255,0.85)"><circle cx="12" cy="12" r="10" fill="rgba(255,255,255,0.25)"/><circle cx="12" cy="12" r="5" fill="rgba(255,255,255,0.75)"/></svg>`;
+        }
+
+        const bestGrid = document.getElementById('bestsellers-grid');
+        const novGrid = document.getElementById('novedades-grid');
+
+        bestGrid.innerHTML = products.filter((p) => p.group === 'best').map(productCard).join('');
+        novGrid.innerHTML = products.filter((p) => p.group === 'nov').map(productCard).join('');
+
+        /* =========================================================
+           LÓGICA DEL CARRITO
+        ========================================================= */
+        let cart = []; // { id, qty }
+
+        /* 👉 CONFIGURA AQUÍ TU NÚMERO DE WHATSAPP (código país + número, SIN + ni espacios) */
+        const WHATSAPP_NUMBER = '573143085580'; // Colombia: 57 + 3143085580
+
+        const cartBtn = document.getElementById('cart-btn');
+        const cartClose = document.getElementById('cart-close');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartItemsEl = document.getElementById('cart-items');
+        const cartEmptyEl = document.getElementById('cart-empty');
+        const cartFooterEl = document.getElementById('cart-footer');
+        const cartCountEl = document.getElementById('cart-count');
+        const cartItemTotalEl = document.getElementById('cart-item-total');
+        const cartSubtotalEl = document.getElementById('cart-subtotal');
+        const cartTotalEl = document.getElementById('cart-total');
+        const cartShippingEl = document.getElementById('cart-shipping');
+
+        function openCart() {
+            cartOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            cartDrawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCart() {
+            cartOverlay.classList.add('opacity-0', 'pointer-events-none');
+            cartDrawer.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        }
+
+        cartBtn.addEventListener('click', openCart);
+        cartClose.addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+        document.getElementById('cart-continue').addEventListener('click', closeCart);
+
+        function addToCart(id) {
+            const item = cart.find((c) => c.id === id);
+            if (item) {
+                item.qty += 1;
+            } else {
+                cart.push({ id, qty: 1 });
+            }
+            renderCart();
+            bumpCartIcon();
+            showToast('¡Producto añadido al carrito!');
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter((c) => c.id !== id);
+            renderCart();
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find((c) => c.id === id);
+            if (!item) return;
+            item.qty += delta;
+            if (item.qty <= 0) removeFromCart(id);
+            else renderCart();
+        }
+
+        function renderCart() {
+            const totalItems = cart.reduce((a, c) => a + c.qty, 0);
+            cartCountEl.textContent = totalItems;
+            cartItemTotalEl.textContent = `(${totalItems})`;
+
+            if (cart.length === 0) {
+                cartItemsEl.innerHTML = '';
+                cartItemsEl.classList.add('hidden');
+                cartEmptyEl.classList.remove('hidden');
+                cartFooterEl.classList.add('hidden');
+                return;
+            }
+
+            cartItemsEl.classList.remove('hidden');
+            cartEmptyEl.classList.add('hidden');
+            cartFooterEl.classList.remove('hidden');
+
+            cartItemsEl.innerHTML = cart
+                .map((c) => {
+                    const p = products.find((x) => x.id === c.id);
+                    return `
+                    <div class="flex gap-4 items-center">
+                        <div class="w-16 h-16 rounded-xl bg-gradient-to-br ${p.grad} flex items-center justify-center text-white text-xl shrink-0">
+                            <i class="fa-solid ${p.icon}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-800 truncate">${p.name}</p>
+                            <p class="text-xs text-gray-400 mb-1">${p.category}</p>
+                            <p class="text-sm font-bold text-magenta-700">${money(p.price)}</p>
+                        </div>
+                        <div class="flex flex-col items-end gap-2">
+                            <button class="remove-btn text-gray-300 hover:text-red-500 transition" data-id="${p.id}" aria-label="Eliminar">
+                                <i class="fa-solid fa-trash-can text-sm"></i>
+                            </button>
+                            <div class="flex items-center border border-magenta-200 rounded-full">
+                                <button class="qty-minus w-7 h-7 flex items-center justify-center text-magenta-600 hover:bg-magenta-50 rounded-l-full" data-id="${p.id}"><i class="fa-solid fa-minus text-xs"></i></button>
+                                <span class="w-7 text-center text-sm font-semibold">${c.qty}</span>
+                                <button class="qty-plus w-7 h-7 flex items-center justify-center text-magenta-600 hover:bg-magenta-50 rounded-r-full" data-id="${p.id}"><i class="fa-solid fa-plus text-xs"></i></button>
+                            </div>
+                        </div>
+                    </div>`;
+                })
+                .join('');
+
+            const subtotal = cart.reduce((a, c) => {
+                const p = products.find((x) => x.id === c.id);
+                return a + p.price * c.qty;
+            }, 0);
+
+            cartSubtotalEl.textContent = money(subtotal);
+            cartTotalEl.textContent = money(subtotal);
+            cartShippingEl.textContent = subtotal >= 150000 ? 'Gratis' : money(12000);
+            const total = subtotal >= 150000 ? subtotal : subtotal + (subtotal > 0 ? 12000 : 0);
+            cartTotalEl.textContent = money(total);
+
+            renderCandySuggest();
+        }
+
+        /* =========================================================
+           SUGERENCIA DE DULCES (upsell / complemento)
+           Solo aparece si hay productos de BELLEZA en el carrito
+           y sugiere dulces que aún NO estén agregados.
+        ========================================================= */
+        const candySuggestEl = document.getElementById('candy-suggest');
+        const candySuggestListEl = document.getElementById('candy-suggest-list');
+
+        function renderCandySuggest() {
+            const hasBeauty = cart.some((c) => {
+                const p = products.find((x) => x.id === c.id);
+                return p && p.type === 'beauty';
+            });
+
+            // Dulces que todavía no están en el carrito
+            const candiesAvailable = products.filter(
+                (p) => p.type === 'candy' && !cart.some((c) => c.id === p.id)
+            );
+
+            if (!hasBeauty || candiesAvailable.length === 0) {
+                candySuggestEl.classList.add('hidden');
+                return;
+            }
+
+            candySuggestEl.classList.remove('hidden');
+            candySuggestListEl.innerHTML = candiesAvailable
+                .slice(0, 2)
+                .map(
+                    (p) => `
+                    <div class="flex items-center gap-3 bg-white rounded-xl p-2 shadow-sm">
+                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br ${p.grad} flex items-center justify-center text-white text-lg shrink-0">
+                            <i class="fa-solid ${p.icon}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-xs font-medium text-gray-800 truncate">${p.name}</p>
+                            <p class="text-sm font-bold text-magenta-700">${money(p.price)}</p>
+                        </div>
+                        <button class="add-btn shrink-0 bg-magenta-600 hover:bg-magenta-700 text-white text-xs font-semibold px-3 py-2 rounded-full flex items-center gap-1 transition" data-id="${p.id}">
+                            <i class="fa-solid fa-plus text-[10px]"></i> Añadir
+                        </button>
+                    </div>`
+                )
+                .join('');
+        }
+
+        /* Delegación de eventos para botones de añadir */
+        document.addEventListener('click', (e) => {
+            const view = e.target.closest('.view-product');
+            if (view) {
+                openProductModal(Number(view.dataset.id));
+                return;
+            }
+            const add = e.target.closest('.add-btn, .quick-add');
+            if (add) {
+                addToCart(Number(add.dataset.id));
+                return;
+            }
+            const minus = e.target.closest('.qty-minus');
+            if (minus) { changeQty(Number(minus.dataset.id), -1); return; }
+            const plus = e.target.closest('.qty-plus');
+            if (plus) { changeQty(Number(plus.dataset.id), 1); return; }
+            const rem = e.target.closest('.remove-btn');
+            if (rem) { removeFromCart(Number(rem.dataset.id)); return; }
+            const fav = e.target.closest('.fav-btn');
+            if (fav) {
+                toggleFavorite(Number(fav.dataset.id));
+                return;
+            }
+            const favRemove = e.target.closest('.fav-remove');
+            if (favRemove) {
+                toggleFavorite(Number(favRemove.dataset.id));
+                return;
+            }
+        });
+
+        /* Checkout → confirmación por WhatsApp */
+        document.getElementById('checkout-btn').addEventListener('click', () => {
+            if (cart.length === 0) return;
+
+            const subtotal = cart.reduce((a, c) => {
+                const p = products.find((x) => x.id === c.id);
+                return a + p.price * c.qty;
+            }, 0);
+            const shipping = subtotal >= 150000 ? 0 : 12000;
+            const total = subtotal + shipping;
+            const totalItems = cart.reduce((a, c) => a + c.qty, 0);
+
+            // Construir el mensaje del pedido
+            let msg = '¡Hola Ramos y Detalles! 💖 Quiero confirmar mi pedido:%0A%0A';
+            cart.forEach((c) => {
+                const p = products.find((x) => x.id === c.id);
+                const line = `• ${c.qty} x ${p.name} — ${money(p.price * c.qty)}`;
+                msg += encodeURIComponent(line) + '%0A';
+            });
+            msg += '%0A' + encodeURIComponent(`Subtotal: ${money(subtotal)}`) + '%0A';
+            msg += encodeURIComponent(`Envío: ${shipping === 0 ? 'Gratis 🎉' : money(shipping)}`) + '%0A';
+            msg += encodeURIComponent(`TOTAL: ${money(total)}`) + '%0A%0A';
+            msg += encodeURIComponent('¿Me ayudan a finalizar la compra? 😊');
+
+            const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${msg}`;
+            window.open(url, '_blank');
+
+            showToast(`Abriendo WhatsApp para confirmar ${totalItems} producto(s)... 💬`);
+        });
+
+        function bumpCartIcon() {
+            cartCountEl.classList.remove('pop');
+            void cartCountEl.offsetWidth; // reflow
+            cartCountEl.classList.add('pop');
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+        let toastTimer;
+        const toastEl = document.getElementById('toast');
+        const toastTextEl = document.getElementById('toast-text');
+        function showToast(msg) {
+            toastTextEl.textContent = msg;
+            toastEl.classList.remove('translate-y-24', 'opacity-0');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toastEl.classList.add('translate-y-24', 'opacity-0');
+            }, 2500);
+        }
+
+        /* =========================================================
+           MENÚ MÓVIL
+        ========================================================= */
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+
+        function openMobileMenu() {
+            mobileOverlay.classList.remove('hidden');
+            mobileMenu.classList.remove('-translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenu() {
+            mobileOverlay.classList.add('hidden');
+            mobileMenu.classList.add('-translate-x-full');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('mobile-menu-btn').addEventListener('click', openMobileMenu);
+        document.getElementById('mobile-menu-close').addEventListener('click', closeMobileMenu);
+        mobileOverlay.addEventListener('click', closeMobileMenu);
+        document.querySelectorAll('.mobile-link').forEach((l) =>
+            l.addEventListener('click', closeMobileMenu)
+        );
+
+        /* =========================================================
+           SLIDER DEL HERO
+        ========================================================= */
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let current = 0;
+        let slideTimer;
+
+        function goToSlide(i) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('bg-magenta-600');
+            dots[current].classList.add('bg-white/70');
+
+            current = (i + slides.length) % slides.length;
+
+            slides[current].classList.add('active');
+            dots[current].classList.add('bg-magenta-600');
+            dots[current].classList.remove('bg-white/70');
+        }
+
+        function nextSlide() { goToSlide(current + 1); }
+        function prevSlide() { goToSlide(current - 1); }
+
+        function startAutoplay() {
+            stopAutoplay();
+            slideTimer = setInterval(nextSlide, 5500);
+        }
+        function stopAutoplay() {
+            clearInterval(slideTimer);
+        }
+
+        document.getElementById('next-slide').addEventListener('click', () => { nextSlide(); startAutoplay(); });
+        document.getElementById('prev-slide').addEventListener('click', () => { prevSlide(); startAutoplay(); });
+        dots.forEach((d) =>
+            d.addEventListener('click', () => { goToSlide(Number(d.dataset.slide)); startAutoplay(); })
+        );
+
+        startAutoplay();
+
+        /* =========================================================
+           NEWSLETTER
+        ========================================================= */
+        document.getElementById('newsletter-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('¡Suscripción exitosa! Revisa tu correo 💌');
+            e.target.reset();
+            // Invita a crear cuenta del club si aún no hay sesión
+            if (!currentUser()) setTimeout(openAccount, 600);
+        });
+
+        /* =========================================================
+           REVISTA DIGITAL FUNCIONAL
+           Cada página puede tener productos clickeables.
+        ========================================================= */
+        const byId = (id) => products.find((p) => p.id === id);
+
+        /* Estructura editorial de la revista (páginas) */
+        const magazinePages = [
+            {
+                type: 'cover',
+                title: 'Ramos y Detalles',
+                subtitle: 'Edición Belleza 2026',
+                tagline: 'El regalo perfecto, en una revista.',
+            },
+            {
+                type: 'set',
+                label: 'Set destacado',
+                title: 'Ramo de Maquillaje · "Para Ella"',
+                text: 'El regalo perfecto: un ramo que combina labios, rostro y un detalle dulce. Haz clic en cada producto para ver su detalle y añadirlo.',
+                items: [1, 2, 5, 11],
+            },
+            {
+                type: 'set',
+                label: 'Look del día',
+                title: 'Mirada de Impacto',
+                text: 'Todo lo que necesitas para unos ojos protagonistas. Toca cada pieza para conocerla a fondo.',
+                items: [3, 4, 6],
+            },
+            {
+                type: 'set',
+                label: 'Rutina esencial',
+                title: 'Skincare que ama tu piel',
+                text: 'Limpia, trata y protege. Una rutina sencilla con resultados reales. Haz clic para descubrir cada fórmula.',
+                items: [7, 8, 9],
+            },
+            {
+                type: 'set',
+                label: 'Zona dulce',
+                title: 'Antójate & Regala',
+                text: 'Añade un detalle dulce a cualquier regalo. Perfectos para acompañar tu set de maquillaje.',
+                items: [10, 11, 12],
+            },
+            {
+                type: 'back',
+                title: '¿Lista para brillar?',
+                text: 'Arma tu propio ramo combinando maquillaje, skincare y dulces. Confirmamos todo contigo por WhatsApp.',
+            },
+        ];
+
+        const catalogModal = document.getElementById('catalog-modal');
+        const catalogPageEl = document.getElementById('catalog-page');
+        const catalogDotsEl = document.getElementById('catalog-dots');
+        const catalogIndicatorEl = document.getElementById('catalog-page-indicator');
+        const catalogPrevBtn = document.getElementById('catalog-prev');
+        const catalogNextBtn = document.getElementById('catalog-next');
+        let catalogIndex = 0;
+
+        /* Mini tarjeta de producto clickeable dentro de la revista */
+        function magazineProductCard(id) {
+            const p = byId(id);
+            return `
+            <button class="catalog-product group text-left bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition flex flex-col" data-id="${p.id}">
+                <div class="h-32 sm:h-40 bg-gradient-to-br ${p.grad} flex items-center justify-center text-white text-4xl relative">
+                    <i class="fa-solid ${p.icon}"></i>
+                    ${p.discount ? `<span class="absolute top-2 left-2 bg-magenta-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${p.discount}%</span>` : ''}
+                    <span class="absolute bottom-2 right-2 bg-white/90 text-magenta-700 text-[10px] font-semibold px-2 py-1 rounded-full opacity-0 group-hover:opacity-100 transition">
+                        <i class="fa-solid fa-eye mr-1"></i>Ver
+                    </span>
+                </div>
+                <div class="p-3 flex-1 flex flex-col">
+                    <p class="text-[10px] uppercase tracking-wider text-magenta-500 mb-0.5">${p.category}</p>
+                    <p class="text-xs font-medium text-gray-800 leading-snug mb-2 flex-1">${p.name}</p>
+                    <span class="text-sm font-bold text-magenta-700">${money(p.price)}</span>
+                </div>
+            </button>`;
+        }
+
+        /* Renderiza una página de la revista */
+        function renderMagazinePage() {
+            const page = magazinePages[catalogIndex];
+            let html = '';
+
+            if (page.type === 'cover') {
+                html = `
+                <div class="h-full min-h-[60vh] rounded-3xl bg-gradient-to-br from-magenta-100 via-nude-50 to-magenta-200 flex flex-col items-center justify-center text-center p-8 shadow-2xl">
+                    <p class="uppercase tracking-[0.4em] text-magenta-500 text-xs mb-6">${page.subtitle}</p>
+                    <h2 class="font-script text-5xl sm:text-7xl font-bold text-magenta-700 mb-4 leading-tight">${page.title}</h2>
+                    <p class="text-gray-600 max-w-sm text-lg">${page.tagline}</p>
+                    <div class="mt-8 text-magenta-400 text-5xl"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                    <p class="mt-10 text-sm text-magenta-500 animate-pulse"><i class="fa-solid fa-arrow-right mr-2"></i>Pasa la página para explorar</p>
+                </div>`;
+            } else if (page.type === 'back') {
+                html = `
+                <div class="h-full min-h-[60vh] rounded-3xl bg-gradient-to-br from-magenta-600 to-magenta-800 text-white flex flex-col items-center justify-center text-center p-8 shadow-2xl">
+                    <div class="text-5xl text-magenta-200 mb-6"><i class="fa-solid fa-heart"></i></div>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold mb-4">${page.title}</h2>
+                    <p class="text-magenta-100 max-w-md text-lg mb-8">${page.text}</p>
+                    <button id="catalog-shop-now" class="bg-white text-magenta-700 px-8 py-3.5 rounded-full font-semibold hover:bg-magenta-50 transition">
+                        Empezar a comprar
+                    </button>
+                </div>`;
+            } else {
+                html = `
+                <div class="h-full min-h-[60vh] rounded-3xl bg-white p-6 sm:p-10 shadow-2xl">
+                    <p class="uppercase tracking-[0.3em] text-magenta-500 text-xs mb-2">${page.label}</p>
+                    <h2 class="font-serif text-3xl sm:text-4xl font-bold text-gray-800 mb-3">${page.title}</h2>
+                    <p class="text-gray-500 max-w-2xl mb-8">${page.text}</p>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                        ${page.items.map(magazineProductCard).join('')}
+                    </div>
+                </div>`;
+            }
+
+            catalogPageEl.innerHTML = html;
+            catalogPageEl.scrollTop = 0;
+
+            // Indicador y dots
+            catalogIndicatorEl.textContent = `Página ${catalogIndex + 1} de ${magazinePages.length}`;
+            catalogDotsEl.innerHTML = magazinePages
+                .map(
+                    (_, i) =>
+                        `<button class="catalog-dot w-2.5 h-2.5 rounded-full transition ${
+                            i === catalogIndex ? 'bg-white w-6' : 'bg-white/40'
+                        }" data-page="${i}" aria-label="Ir a página ${i + 1}"></button>`
+                )
+                .join('');
+
+            catalogPrevBtn.disabled = catalogIndex === 0;
+            catalogNextBtn.disabled = catalogIndex === magazinePages.length - 1;
+        }
+
+        function catalogGoTo(i) {
+            catalogIndex = Math.max(0, Math.min(magazinePages.length - 1, i));
+            renderMagazinePage();
+        }
+
+        function openCatalog() {
+            catalogIndex = 0;
+            renderMagazinePage();
+            catalogModal.classList.remove('hidden');
+            catalogModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeCatalog() {
+            catalogModal.classList.add('hidden');
+            catalogModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('open-catalog').addEventListener('click', openCatalog);
+        document.getElementById('catalog-close').addEventListener('click', closeCatalog);
+        catalogPrevBtn.addEventListener('click', () => catalogGoTo(catalogIndex - 1));
+        catalogNextBtn.addEventListener('click', () => catalogGoTo(catalogIndex + 1));
+
+        /* Clicks dentro de la revista: dots, producto, y "empezar a comprar" */
+        catalogModal.addEventListener('click', (e) => {
+            const dot = e.target.closest('.catalog-dot');
+            if (dot) { catalogGoTo(Number(dot.dataset.page)); return; }
+
+            const prod = e.target.closest('.catalog-product');
+            if (prod) { openProductModal(Number(prod.dataset.id)); return; }
+
+            if (e.target.closest('#catalog-shop-now')) {
+                closeCatalog();
+                document.getElementById('best-sellers').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+        });
+
+        /* =========================================================
+           MODAL DE DETALLE DE PRODUCTO (Quick View)
+        ========================================================= */
+        const productModal = document.getElementById('product-modal');
+        const pmImg = document.getElementById('product-modal-img');
+        const pmCat = document.getElementById('product-modal-cat');
+        const pmName = document.getElementById('product-modal-name');
+        const pmPrice = document.getElementById('product-modal-price');
+        const pmOld = document.getElementById('product-modal-old');
+        const pmDisc = document.getElementById('product-modal-disc');
+        const pmDesc = document.getElementById('product-modal-desc');
+        const pmDetail = document.getElementById('product-modal-detail');
+        const pmAdd = document.getElementById('product-modal-add');
+        let currentProductId = null;
+
+        function openProductModal(id) {
+            const p = byId(id);
+            if (!p) return;
+            currentProductId = id;
+
+            // Reset gradientes previos en la imagen
+            pmImg.className = `sm:w-1/2 h-56 sm:h-auto flex items-center justify-center text-white text-7xl shrink-0 bg-gradient-to-br ${p.grad}`;
+            pmImg.innerHTML = `<i class="fa-solid ${p.icon}"></i>`;
+
+            pmCat.textContent = p.category;
+            pmName.textContent = p.name;
+            pmPrice.textContent = money(p.price);
+            pmOld.textContent = p.oldPrice ? money(p.oldPrice) : '';
+            pmDisc.textContent = p.discount ? `-${p.discount}%` : '';
+            pmDisc.classList.toggle('hidden', !p.discount);
+            pmDesc.textContent = p.desc || '';
+            pmDetail.textContent = p.detail || '';
+
+            productModal.classList.remove('hidden');
+            productModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeProductModal() {
+            productModal.classList.add('hidden');
+            productModal.classList.remove('flex');
+            // Si la revista sigue abierta, mantener scroll bloqueado
+            if (catalogModal.classList.contains('hidden')) {
+                document.body.style.overflow = '';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        document.getElementById('product-close').addEventListener('click', closeProductModal);
+        productModal.addEventListener('click', (e) => { if (e.target === productModal) closeProductModal(); });
+        pmAdd.addEventListener('click', () => {
+            if (currentProductId != null) {
+                addToCart(currentProductId);
+                closeProductModal();
+                openCart();
+            }
+        });
+
+        /* Cerrar con tecla Escape (en orden lógico) */
+        document.addEventListener('keydown', (e) => {
+            if (e.key !== 'Escape') return;
+            if (!productModal.classList.contains('hidden')) { closeProductModal(); return; }
+            if (!catalogModal.classList.contains('hidden')) { closeCatalog(); return; }
+            if (!accountModal.classList.contains('hidden')) { closeAccount(); return; }
+            if (!advisorChat.classList.contains('hidden')) { closeAdvisor(); return; }
+            if (!favDrawer.classList.contains('translate-x-full')) { closeFav(); return; }
+            closeCart();
+            closeMobileMenu();
+        });
+
+        /* Navegación con flechas del teclado dentro de la revista */
+        document.addEventListener('keydown', (e) => {
+            if (catalogModal.classList.contains('hidden')) return;
+            if (!productModal.classList.contains('hidden')) return;
+            if (e.key === 'ArrowRight') catalogGoTo(catalogIndex + 1);
+            if (e.key === 'ArrowLeft') catalogGoTo(catalogIndex - 1);
+        });
+
+        /* =========================================================
+           CUENTAS DE USUARIO (Club) — persistencia en localStorage
+        ========================================================= */
+        const USERS_KEY = 'ryd_users';
+        const SESSION_KEY = 'ryd_session';
+
+        const getUsers = () => JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+        const saveUsers = (u) => localStorage.setItem(USERS_KEY, JSON.stringify(u));
+        const getSession = () => JSON.parse(localStorage.getItem(SESSION_KEY) || 'null');
+        const setSession = (email) => localStorage.setItem(SESSION_KEY, JSON.stringify(email));
+        const clearSession = () => localStorage.removeItem(SESSION_KEY);
+        const currentUser = () => {
+            const email = getSession();
+            return email ? getUsers().find((u) => u.email === email) : null;
+        };
+
+        const accountModal = document.getElementById('account-modal');
+        const accountLabel = document.getElementById('account-label');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const accountLogged = document.getElementById('account-logged');
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+
+        function openAccount() {
+            refreshAccountView();
+            accountModal.classList.remove('hidden');
+            accountModal.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeAccount() {
+            accountModal.classList.add('hidden');
+            accountModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        function showAccountTab(which) {
+            const isLogin = which === 'login';
+            loginForm.classList.toggle('hidden', !isLogin);
+            registerForm.classList.toggle('hidden', isLogin);
+            tabLogin.classList.toggle('text-magenta-700', isLogin);
+            tabLogin.classList.toggle('border-magenta-600', isLogin);
+            tabLogin.classList.toggle('text-gray-400', !isLogin);
+            tabLogin.classList.toggle('border-transparent', !isLogin);
+            tabRegister.classList.toggle('text-magenta-700', !isLogin);
+            tabRegister.classList.toggle('border-magenta-600', !isLogin);
+            tabRegister.classList.toggle('text-gray-400', isLogin);
+            tabRegister.classList.toggle('border-transparent', isLogin);
+        }
+
+        function refreshAccountView() {
+            const user = currentUser();
+            if (user) {
+                loginForm.classList.add('hidden');
+                registerForm.classList.add('hidden');
+                tabLogin.parentElement.classList.add('hidden');
+                accountLogged.classList.remove('hidden');
+                document.getElementById('account-username').textContent = user.name;
+                document.getElementById('account-useremail').textContent = user.email;
+                document.getElementById('account-fav-count').textContent = (user.favs || []).length;
+                accountLabel.textContent = user.name.split(' ')[0];
+            } else {
+                tabLogin.parentElement.classList.remove('hidden');
+                accountLogged.classList.add('hidden');
+                showAccountTab('login');
+                accountLabel.textContent = 'Cuenta';
+            }
+        }
+
+        document.getElementById('account-btn').addEventListener('click', openAccount);
+        document.getElementById('account-close').addEventListener('click', closeAccount);
+        accountModal.addEventListener('click', (e) => { if (e.target === accountModal) closeAccount(); });
+        tabLogin.addEventListener('click', () => showAccountTab('login'));
+        tabRegister.addEventListener('click', () => showAccountTab('register'));
+        document.getElementById('goto-register').addEventListener('click', () => showAccountTab('register'));
+
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = new FormData(registerForm);
+            const name = data.get('name').trim();
+            const email = data.get('email').trim().toLowerCase();
+            const password = data.get('password');
+            const err = document.getElementById('register-error');
+            const users = getUsers();
+            if (users.some((u) => u.email === email)) {
+                err.textContent = 'Ya existe una cuenta con este correo. Inicia sesión.';
+                err.classList.remove('hidden');
+                return;
+            }
+            users.push({ name, email, password, favs: [] });
+            saveUsers(users);
+            setSession(email);
+            err.classList.add('hidden');
+            registerForm.reset();
+            refreshAccountView();
+            updateFavCount();
+            syncFavButtons();
+            showToast(`¡Bienvenida al Club, ${name.split(' ')[0]}! 💖`);
+        });
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const data = new FormData(loginForm);
+            const email = data.get('email').trim().toLowerCase();
+            const password = data.get('password');
+            const err = document.getElementById('login-error');
+            const user = getUsers().find((u) => u.email === email && u.password === password);
+            if (!user) {
+                err.textContent = 'Correo o contraseña incorrectos.';
+                err.classList.remove('hidden');
+                return;
+            }
+            setSession(email);
+            err.classList.add('hidden');
+            loginForm.reset();
+            refreshAccountView();
+            updateFavCount();
+            syncFavButtons();
+            showToast(`¡Hola de nuevo, ${user.name.split(' ')[0]}! 😊`);
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            clearSession();
+            refreshAccountView();
+            updateFavCount();
+            syncFavButtons();
+            showToast('Sesión cerrada. ¡Vuelve pronto! 👋');
+        });
+
+        /* Conectar el newsletter del footer con el registro del club */
+        /* (se mantiene el toast ya existente; aquí solo abrimos cuenta si no hay sesión) */
+
+        /* =========================================================
+           FAVORITOS POR USUARIO
+        ========================================================= */
+        const favDrawer = document.getElementById('fav-drawer');
+        const favOverlay = document.getElementById('fav-overlay');
+        const favCountEl = document.getElementById('fav-count');
+        const favListEl = document.getElementById('fav-list');
+        const favEmptyEl = document.getElementById('fav-empty');
+        const favEmptyText = document.getElementById('fav-empty-text');
+
+        function getFavs() {
+            const user = currentUser();
+            return user ? (user.favs || []) : [];
+        }
+
+        function toggleFavorite(id) {
+            const user = currentUser();
+            if (!user) {
+                showToast('Inicia sesión para guardar tus favoritos 💕');
+                openAccount();
+                return;
+            }
+            const users = getUsers();
+            const u = users.find((x) => x.email === user.email);
+            u.favs = u.favs || [];
+            if (u.favs.includes(id)) {
+                u.favs = u.favs.filter((f) => f !== id);
+            } else {
+                u.favs.push(id);
+                showToast('¡Añadido a favoritos! ❤️');
+            }
+            saveUsers(users);
+            updateFavCount();
+            syncFavButtons();
+            renderFavList();
+        }
+
+        function updateFavCount() {
+            const n = getFavs().length;
+            favCountEl.textContent = n;
+            const accFav = document.getElementById('account-fav-count');
+            if (accFav) accFav.textContent = n;
+        }
+
+        /* Pinta los corazones de las tarjetas según favoritos del usuario */
+        function syncFavButtons() {
+            const favs = getFavs();
+            document.querySelectorAll('.fav-btn').forEach((btn) => {
+                const id = Number(btn.dataset.id);
+                const icon = btn.querySelector('i');
+                const active = favs.includes(id);
+                icon.classList.toggle('fa-solid', active);
+                icon.classList.toggle('fa-regular', !active);
+                btn.classList.toggle('bg-magenta-500', active);
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('bg-white/90', !active);
+                btn.classList.toggle('text-magenta-500', !active);
+            });
+        }
+
+        function renderFavList() {
+            const favs = getFavs();
+            const user = currentUser();
+            if (!user) {
+                favEmptyText.innerHTML = 'Inicia sesión para ver<br />tus productos favoritos. 💕';
+            } else {
+                favEmptyText.innerHTML = 'Aún no tienes favoritos.<br />¡Guarda tus productos preferidos! 💕';
+            }
+            if (favs.length === 0) {
+                favListEl.innerHTML = '';
+                favListEl.classList.add('hidden');
+                favEmptyEl.classList.remove('hidden');
+                return;
+            }
+            favListEl.classList.remove('hidden');
+            favEmptyEl.classList.add('hidden');
+            favListEl.innerHTML = favs
+                .map((id) => {
+                    const p = byId(id);
+                    if (!p) return '';
+                    return `
+                    <div class="flex gap-4 items-center">
+                        <button class="view-product w-16 h-16 rounded-xl bg-gradient-to-br ${p.grad} flex items-center justify-center text-white text-xl shrink-0" data-id="${p.id}">
+                            <i class="fa-solid ${p.icon} pointer-events-none"></i>
+                        </button>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-800 truncate">${p.name}</p>
+                            <p class="text-xs text-gray-400 mb-1">${p.category}</p>
+                            <p class="text-sm font-bold text-magenta-700">${money(p.price)}</p>
+                        </div>
+                        <div class="flex flex-col gap-2 items-end">
+                            <button class="fav-remove text-magenta-400 hover:text-red-500 transition" data-id="${p.id}" aria-label="Quitar"><i class="fa-solid fa-heart-crack"></i></button>
+                            <button class="add-btn bg-magenta-600 hover:bg-magenta-700 text-white text-xs font-semibold px-3 py-1.5 rounded-full" data-id="${p.id}">Añadir</button>
+                        </div>
+                    </div>`;
+                })
+                .join('');
+        }
+
+        function openFav() {
+            renderFavList();
+            favOverlay.classList.remove('opacity-0', 'pointer-events-none');
+            favDrawer.classList.remove('translate-x-full');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeFav() {
+            favOverlay.classList.add('opacity-0', 'pointer-events-none');
+            favDrawer.classList.add('translate-x-full');
+            document.body.style.overflow = '';
+        }
+        document.getElementById('fav-btn').addEventListener('click', openFav);
+        document.getElementById('fav-close').addEventListener('click', closeFav);
+        favOverlay.addEventListener('click', closeFav);
+
+        /* Accesos desde el menú móvil */
+        document.getElementById('mobile-account').addEventListener('click', () => { closeMobileMenu(); openAccount(); });
+        document.getElementById('mobile-fav').addEventListener('click', () => { closeMobileMenu(); openFav(); });
+
+        /* =========================================================
+           CHAT DE ASESORÍA DE BELLEZA (simulado, en la página)
+        ========================================================= */
+        const advisorChat = document.getElementById('advisor-chat');
+        const advisorFab = document.getElementById('advisor-fab');
+        const advisorMessages = document.getElementById('advisor-messages');
+        const advisorForm = document.getElementById('advisor-form');
+        const advisorInput = document.getElementById('advisor-input');
+        const advisorQuick = document.getElementById('advisor-quick');
+        let advisorStarted = false;
+
+        const quickReplies = [
+            '¿Qué base me recomiendas?',
+            'Rutina para piel grasa',
+            'Ideas de regalo',
+            '¿Tienen envíos?',
+        ];
+
+        function advisorReply(text) {
+            const t = text.toLowerCase();
+            if (t.includes('base') || t.includes('maquillaje') || t.includes('rostro'))
+                return 'Para un acabado natural te recomiendo nuestra <b>Base Fluida Cobertura Total HD</b> 💄. Controla el brillo y dura todo el día. ¿Quieres que te muestre tonos?';
+            if (t.includes('grasa') || t.includes('rutina') || t.includes('piel'))
+                return 'Para piel grasa: limpieza suave, <b>Serum de Vitamina C</b> en la mañana y <b>Crema con Niacinamida</b> (controla el sebo) 🌿. ¡No olvides el protector solar FPS 50+!';
+            if (t.includes('regalo') || t.includes('ramo') || t.includes('detalle'))
+                return '¡Me encanta! 🌸 Nuestros <b>ramos personalizados</b> combinan maquillaje + un dulce de regalo. El set "Para Ella" es el más pedido. ¿Para qué ocasión es?';
+            if (t.includes('envío') || t.includes('envio') || t.includes('domicilio'))
+                return 'Hacemos envíos a todo el país 🚚. ¡Y es <b>GRATIS</b> en compras superiores a $150.000! Para confirmar tu pedido te atendemos por WhatsApp.';
+            if (t.includes('precio') || t.includes('cuesta') || t.includes('vale'))
+                return 'Tenemos opciones para todo presupuesto 💖. Cuéntame qué producto te interesa y te doy el precio exacto.';
+            if (t.includes('labial') || t.includes('labios'))
+                return 'Nuestro <b>Labial Mate "Rosa Vino"</b> es un best seller: alta duración y no reseca 💋. ¿Te gustan los tonos nude o intensos?';
+            if (t.includes('gracias'))
+                return '¡Con gusto! 💕 Si quieres finalizar una compra, te atiendo por WhatsApp. ¿Algo más en lo que te ayude?';
+            if (t.includes('hola') || t.includes('buenas'))
+                return '¡Hola! 😊 Soy tu asesora de belleza. Puedo ayudarte con maquillaje, skincare, dulces e ideas de regalo. ¿Qué buscas hoy?';
+            return 'Puedo ayudarte con maquillaje, skincare, dulces y armar tu <b>ramo personalizado</b> 🌸. Para pedidos y pagos te atendemos por WhatsApp. ¿Qué te gustaría saber?';
+        }
+
+        function addAdvisorMsg(text, who) {
+            const wrap = document.createElement('div');
+            if (who === 'user') {
+                wrap.className = 'flex justify-end';
+                wrap.innerHTML = `<div class="bg-magenta-600 text-white rounded-2xl rounded-br-md px-4 py-2 max-w-[80%]">${text}</div>`;
+            } else {
+                wrap.className = 'flex justify-start';
+                wrap.innerHTML = `<div class="bg-white border border-magenta-100 text-gray-700 rounded-2xl rounded-bl-md px-4 py-2 max-w-[85%] shadow-sm">${text}</div>`;
+            }
+            advisorMessages.appendChild(wrap);
+            advisorMessages.scrollTop = advisorMessages.scrollHeight;
+        }
+
+        function botTyping(then) {
+            const wrap = document.createElement('div');
+            wrap.className = 'flex justify-start';
+            wrap.innerHTML = `<div class="bg-white border border-magenta-100 rounded-2xl px-4 py-3 shadow-sm"><span class="inline-flex gap-1"><span class="w-1.5 h-1.5 bg-magenta-300 rounded-full animate-bounce"></span><span class="w-1.5 h-1.5 bg-magenta-300 rounded-full animate-bounce" style="animation-delay:.15s"></span><span class="w-1.5 h-1.5 bg-magenta-300 rounded-full animate-bounce" style="animation-delay:.3s"></span></span></div>`;
+            advisorMessages.appendChild(wrap);
+            advisorMessages.scrollTop = advisorMessages.scrollHeight;
+            setTimeout(() => { wrap.remove(); then(); }, 800);
+        }
+
+        function renderQuickReplies() {
+            advisorQuick.innerHTML = quickReplies
+                .map((q) => `<button class="advisor-quick-btn text-xs border border-magenta-300 text-magenta-600 hover:bg-magenta-50 rounded-full px-3 py-1.5 transition">${q}</button>`)
+                .join('');
+        }
+
+        function openAdvisor() {
+            advisorChat.classList.remove('hidden');
+            advisorChat.classList.add('flex');
+            advisorFab.classList.add('hidden');
+            if (!advisorStarted) {
+                advisorStarted = true;
+                const u = currentUser();
+                const hi = u ? `¡Hola, ${u.name.split(' ')[0]}! 💖` : '¡Hola! 💖';
+                addAdvisorMsg(`${hi} Soy tu <b>asesora de belleza</b>. Puedo recomendarte productos y ayudarte a armar tu ramo. ¿En qué te ayudo hoy?`, 'bot');
+                renderQuickReplies();
+            }
+            advisorMessages.scrollTop = advisorMessages.scrollHeight;
+        }
+        function closeAdvisor() {
+            advisorChat.classList.add('hidden');
+            advisorChat.classList.remove('flex');
+            advisorFab.classList.remove('hidden');
+        }
+
+        document.querySelectorAll('.open-advisor').forEach((b) => b.addEventListener('click', openAdvisor));
+        document.getElementById('advisor-close').addEventListener('click', closeAdvisor);
+
+        advisorForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const text = advisorInput.value.trim();
+            if (!text) return;
+            addAdvisorMsg(text, 'user');
+            advisorInput.value = '';
+            botTyping(() => addAdvisorMsg(advisorReply(text), 'bot'));
+        });
+
+        advisorQuick.addEventListener('click', (e) => {
+            const b = e.target.closest('.advisor-quick-btn');
+            if (!b) return;
+            const text = b.textContent;
+            addAdvisorMsg(text, 'user');
+            botTyping(() => addAdvisorMsg(advisorReply(text), 'bot'));
+        });
+
+        /* Botón flotante de WhatsApp: usa el mismo número configurado arriba */
+        const waBaseUrl = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent('¡Hola Ramos y Detalles! 💖 Quiero terminar mi compra.')}`;
+        const whatsappFloat = document.getElementById('whatsapp-float');
+        whatsappFloat.href = waBaseUrl;
+        document.querySelectorAll('.js-whatsapp-link').forEach((el) => {
+            el.href = waBaseUrl;
+            el.target = '_blank';
+            el.rel = 'noopener';
+        });
+
+        /* Inicializa estado */
+        renderCart();
+        refreshAccountView();
+        updateFavCount();
+        syncFavButtons();
+    </script>
+</body>
+</html>

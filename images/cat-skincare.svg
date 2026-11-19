@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <radialGradient id="bgS" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#fde4f1"/>
+      <stop offset="100%" stop-color="#f7c9df"/>
+    </radialGradient>
+    <linearGradient id="hairS" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8a5a3b"/>
+      <stop offset="100%" stop-color="#5e3a24"/>
+    </linearGradient>
+  </defs>
+  <circle cx="200" cy="200" r="200" fill="url(#bgS)"/>
+  <circle cx="200" cy="200" r="188" fill="none" stroke="#f49ac8" stroke-width="6"/>
+  <!-- leaves -->
+  <g fill="#6bbf7a">
+    <path d="M70 180c-18-6-30 8-28 26 18 2 32-8 28-26z"/>
+    <path d="M78 150c-14-12-30-4-34 14 18 6 34 2 34-14z"/>
+  </g>
+  <!-- hearts & sparkles -->
+  <g fill="#ec4899" opacity="0.9">
+    <path d="M330 150c-6-8-18-4-18 6 0 8 10 13 18 19 8-6 18-11 18-19 0-10-12-14-18-6z"/>
+    <path d="M300 250c-6-8-18-4-18 6 0 8 10 13 18 19 8-6 18-11 18-19 0-10-12-14-18-6z"/>
+  </g>
+  <g fill="#fbbf24">
+    <path d="M300 95l5 14 14 5-14 5-5 14-5-14-14-5 14-5z"/>
+    <path d="M95 250l4 11 11 4-11 4-4 11-4-11-11-4 11-4z"/>
+  </g>
+  <!-- hair back -->
+  <path d="M120 150c0-55 40-95 80-95s80 40 80 95c6 60 2 120-10 150-20-10-40-14-70-14s-50 4-70 14c-12-30-16-90-10-150z" fill="url(#hairS)"/>
+  <!-- bow -->
+  <g fill="#f472b6">
+    <path d="M200 50c-22-22-60-10-60 16 0 14 18 22 40 20-16 8-18 26 0 30 10 2 18-6 20-16 2 10 10 18 20 16 18-4 16-22 0-30 22 2 40-6 40-20 0-26-38-38-60-16z"/>
+    <circle cx="200" cy="66" r="9" fill="#ec4899"/>
+  </g>
+  <!-- face -->
+  <ellipse cx="200" cy="175" rx="58" ry="66" fill="#ffe3d3"/>
+  <!-- face mask dabs -->
+  <g fill="#ffffff" opacity="0.85">
+    <circle cx="170" cy="150" r="7"/>
+    <circle cx="232" cy="150" r="7"/>
+    <circle cx="200" cy="208" r="7"/>
+  </g>
+  <!-- cheeks -->
+  <circle cx="165" cy="190" r="12" fill="#f9a8d4" opacity="0.7"/>
+  <circle cx="235" cy="190" r="12" fill="#f9a8d4" opacity="0.7"/>
+  <!-- eyes closed (relaxed) -->
+  <path d="M166 166q11 8 24 0" stroke="#4a2c1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M212 166q11 8 24 0" stroke="#4a2c1a" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- brows -->
+  <path d="M166 148q11 -6 24 -2" stroke="#6b4228" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M214 148q12 -4 24 2" stroke="#6b4228" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <!-- smile -->
+  <path d="M188 204q12 10 24 0" stroke="#e8537f" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- cream tube -->
+  <g>
+    <rect x="250" y="248" width="26" height="54" rx="8" fill="#f6c6dd" stroke="#e58bb6" stroke-width="2"/>
+    <rect x="258" y="240" width="10" height="12" rx="2" fill="#e58bb6"/>
+  </g>
+  <!-- dropper serum -->
+  <g>
+    <rect x="128" y="258" width="18" height="40" rx="4" fill="#f9a8d4"/>
+    <rect x="132" y="244" width="10" height="16" rx="3" fill="#e58bb6"/>
+  </g>
+  <!-- banner -->
+  <rect x="86" y="320" width="228" height="46" rx="23" fill="#f9c6e0" stroke="#ec4899" stroke-width="3"/>
+  <text x="200" y="352" text-anchor="middle" font-family="Georgia, serif" font-size="27" font-weight="bold" fill="#8a3a63">Skincare</text>
+</svg>
