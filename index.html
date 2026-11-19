@@ -1032,6 +1032,12 @@
                             <p id="product-modal-detail" class="text-sm text-gray-600"></p>
                         </div>
 
+                        <!-- Beneficios -->
+                        <div id="product-benefits" class="mb-5 hidden">
+                            <p class="text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2"><i class="fa-solid fa-heart text-magenta-500"></i> Beneficios</p>
+                            <ul id="product-benefits-list" class="space-y-1.5 text-sm text-gray-600"></ul>
+                        </div>
+
                         <!-- Cantidad -->
                         <div class="mb-5">
                             <p class="text-sm font-semibold text-gray-700 mb-2">Cantidad</p>
@@ -1051,6 +1057,16 @@
                                 <i class="fa-brands fa-whatsapp text-lg"></i> Comprar ahora
                             </button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ===== Especificaciones ===== -->
+                <div id="product-specs-wrap" class="mt-10 pt-8 border-t border-magenta-100 hidden">
+                    <h4 class="text-magenta-600 font-serif text-xl font-bold mb-5 flex items-center gap-2"><i class="fa-solid fa-clipboard-list"></i> Especificaciones del producto</h4>
+                    <div class="overflow-hidden rounded-2xl border border-magenta-100">
+                        <table class="w-full text-sm">
+                            <tbody id="product-specs"></tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -1075,17 +1091,36 @@
             {
                 id: 1,
                 type: 'beauty',
-                name: 'Kit X 8 Forever Gloss Ref bg01',
+                name: 'Kit X 8 Forever Gloss Ref',
                 category: 'Maquillaje · Labios',
-                desc: '¡Aquí están los esenciales para tus labios! Kit de 8 glosses Forever Gloss en tonos variados, acabado brillante e hidratante.',
-                detail: 'Contenido: 8 tonos · Acabado gloss hidratante · Unidad de medida: Único',
+                desc: 'Tus labios requieren un color diferente cada día. Completa tu rutina de maquillaje con este práctico kit de 8 glosses con color en tonos rosas, rojizos y nudes. Su textura suave y ligera brinda un acabado brillante que realza los labios, aportando color y frescura con una durabilidad media. Perfectos para crear diferentes looks y lucir unos labios radiantes en cualquier ocasión.',
+                detail: 'Contenido: 5g c/u · 8 tonos surtidos · Acabado luminoso · Registro Invima: NSOC32125-24CO',
                 price: 21000,
                 icon: 'fa-wand-sparkles',
                 grad: 'from-magenta-300 to-magenta-500',
                 images: [
-                    'images/forever-gloss-1.webp',
+                    'images/forever-gloss-4.webp',
                     'images/forever-gloss-2.webp',
-                    'images/forever-gloss-3.webp',
+                    'images/forever-gloss-1.webp',
+                ],
+                benefits: [
+                    'Máxima variedad: 8 tonos surtidos para combinar con cualquier maquillaje.',
+                    'Acabado espejo: brillo intenso que disimula visualmente los labios resecos.',
+                    'Ligereza: sensación de "no weight" (sin peso) que no deja los labios pegajosos.',
+                ],
+                specs: [
+                    ['Tipo de piel', 'Todo tipo de piel'],
+                    ['Acabado', 'Luminoso'],
+                    ['Tipo de labial', 'Brillo'],
+                    ['Fórmula cosmética', 'Líquida'],
+                    ['Contenido', '5 g c/u'],
+                    ['Modo de uso', 'Selecciona el tono según tu outfit. Aplica en capas finas; la fórmula es construible para mayor intensidad.'],
+                    ['Cuidados', 'Guardar el producto en un lugar fresco y seco, sin recibir sol directo.'],
+                    ['Registro Invima', 'NSOC32125-24CO'],
+                    ['Garantía', '30 días'],
+                    ['Unidad mínima mayoristas', '1'],
+                    ['Cantidad por display', 'Display por 12 unidades'],
+                    ['Ingredientes', 'PARAFFINUM LIQUIDUM, ETHYLHEXYL PALMITATE, HYDROGENATED POLY(C6-20 OLEFIN), HYDROGENATED STYRENE/ISOPRENE COPOLYMER, POLYISOBUTENE, SILICA DIMETHYL SILYLATE, PHENOXYETHANOL (0.50%), PARFUM, PUEDE CONTENER CI 77891, CI 77491, CI 77492, CI 77499, CI 15985, CI 45410, CI 15850.'],
                 ],
                 group: 'best',
             },
@@ -1936,6 +1971,36 @@
             pmDisc.classList.toggle('hidden', !p.discount);
             pmDesc.textContent = p.desc || '';
             pmDetail.textContent = p.detail || '';
+
+            // Beneficios
+            const benWrap = document.getElementById('product-benefits');
+            const benList = document.getElementById('product-benefits-list');
+            if (Array.isArray(p.benefits) && p.benefits.length) {
+                benList.innerHTML = p.benefits
+                    .map((b) => `<li class="flex gap-2"><i class="fa-solid fa-check text-magenta-500 mt-0.5"></i><span>${b}</span></li>`)
+                    .join('');
+                benWrap.classList.remove('hidden');
+            } else {
+                benWrap.classList.add('hidden');
+            }
+
+            // Especificaciones
+            const specsWrap = document.getElementById('product-specs-wrap');
+            const specsBody = document.getElementById('product-specs');
+            if (Array.isArray(p.specs) && p.specs.length) {
+                specsBody.innerHTML = p.specs
+                    .map(
+                        ([k, v], i) => `
+                        <tr class="${i % 2 ? 'bg-magenta-50/40' : 'bg-white'}">
+                            <td class="py-2.5 px-4 font-semibold text-gray-700 align-top w-1/3">${k}</td>
+                            <td class="py-2.5 px-4 text-gray-600">${v}</td>
+                        </tr>`
+                    )
+                    .join('');
+                specsWrap.classList.remove('hidden');
+            } else {
+                specsWrap.classList.add('hidden');
+            }
 
             renderThumbs();
             renderStage();
