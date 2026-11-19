@@ -957,34 +957,102 @@
     <!-- ============================================================= -->
     <!-- MODAL DE DETALLE DE PRODUCTO (Quick View)                     -->
     <!-- ============================================================= -->
-    <div id="product-modal" class="fixed inset-0 bg-black/70 z-[80] hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-3xl w-full relative overflow-hidden max-h-[90vh] flex flex-col sm:flex-row">
-            <button id="product-close" class="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 text-gray-500 hover:text-magenta-600 flex items-center justify-center shadow transition" aria-label="Cerrar">
+    <div id="product-modal" class="fixed inset-0 bg-black/70 z-[80] hidden items-start sm:items-center justify-center p-0 sm:p-4 overflow-y-auto">
+        <div class="bg-white sm:rounded-3xl max-w-5xl w-full relative min-h-screen sm:min-h-0 sm:max-h-[92vh] sm:overflow-y-auto">
+            <button id="product-close" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/90 text-gray-500 hover:text-magenta-600 flex items-center justify-center shadow transition" aria-label="Cerrar">
                 <i class="fa-solid fa-xmark text-lg"></i>
             </button>
 
-            <!-- Imagen -->
-            <div id="product-modal-img" class="sm:w-1/2 h-56 sm:h-auto flex items-center justify-center text-white text-7xl shrink-0">
-                <i class="fa-solid fa-wand-sparkles"></i>
-            </div>
+            <div class="p-5 sm:p-8">
+                <!-- Breadcrumb -->
+                <nav id="product-modal-breadcrumb" class="text-xs text-gray-400 mb-5 flex flex-wrap items-center gap-1"></nav>
 
-            <!-- Info -->
-            <div class="sm:w-1/2 p-6 sm:p-8 overflow-y-auto">
-                <p id="product-modal-cat" class="text-[11px] uppercase tracking-wider text-magenta-500 mb-2"></p>
-                <h3 id="product-modal-name" class="text-xl sm:text-2xl font-bold text-gray-800 mb-3"></h3>
-                <div class="flex items-center gap-3 mb-4">
-                    <span id="product-modal-price" class="text-2xl font-bold text-magenta-700"></span>
-                    <span id="product-modal-old" class="text-base text-gray-400 line-through"></span>
-                    <span id="product-modal-disc" class="bg-magenta-100 text-magenta-700 text-xs font-bold px-2 py-1 rounded-full"></span>
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- ===== Galería ===== -->
+                    <div class="flex gap-3">
+                        <!-- Miniaturas -->
+                        <div id="product-thumbs" class="flex flex-col gap-3 shrink-0"></div>
+
+                        <!-- Imagen principal con zoom -->
+                        <div class="flex-1">
+                            <div id="product-stage"
+                                 class="relative w-full aspect-square rounded-2xl bg-magenta-50 overflow-hidden flex items-center justify-center select-none cursor-zoom-in">
+                                <!-- Imagen (foto real) -->
+                                <img id="product-stage-img" src="" alt=""
+                                     class="w-full h-full object-contain transition-transform duration-200 hidden" />
+                                <!-- Respaldo con ícono -->
+                                <div id="product-stage-icon" class="w-full h-full flex items-center justify-center text-white text-8xl">
+                                    <i class="fa-solid fa-wand-sparkles"></i>
+                                </div>
+                                <!-- Indicador de lupa -->
+                                <span class="absolute bottom-3 right-3 bg-white/90 text-magenta-600 text-xs font-medium px-2.5 py-1 rounded-full shadow pointer-events-none flex items-center gap-1">
+                                    <i class="fa-solid fa-magnifying-glass-plus"></i> Pasa para acercar
+                                </span>
+
+                                <!-- Flechas -->
+                                <button id="product-prev" class="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-magenta-700 flex items-center justify-center shadow transition" aria-label="Anterior">
+                                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                                </button>
+                                <button id="product-next" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/90 hover:bg-white text-magenta-700 flex items-center justify-center shadow transition" aria-label="Siguiente">
+                                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== Info ===== -->
+                    <div>
+                        <h3 id="product-modal-name" class="font-serif text-2xl sm:text-3xl font-bold text-gray-800 mb-2"></h3>
+
+                        <!-- Estrellas -->
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-amber-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></span>
+                            <span class="text-xs text-gray-400">(0) Comentarios de clientes</span>
+                        </div>
+
+                        <p id="product-modal-desc" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
+
+                        <!-- Precio -->
+                        <div class="flex items-center gap-3 mb-1">
+                            <span id="product-modal-price" class="text-3xl font-bold text-magenta-600"></span>
+                            <span id="product-modal-old" class="text-lg text-gray-400 line-through"></span>
+                            <span id="product-modal-disc" class="bg-magenta-100 text-magenta-700 text-xs font-bold px-2 py-1 rounded-full"></span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-5">Unidad de medida: Único</p>
+
+                        <!-- Detalles -->
+                        <div class="bg-magenta-50 rounded-xl p-4 mb-5">
+                            <p class="text-xs font-semibold text-magenta-700 uppercase tracking-wide mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Detalles</p>
+                            <p id="product-modal-detail" class="text-sm text-gray-600"></p>
+                        </div>
+
+                        <!-- Cantidad -->
+                        <div class="mb-5">
+                            <p class="text-sm font-semibold text-gray-700 mb-2">Cantidad</p>
+                            <div class="inline-flex items-center border border-magenta-200 rounded-full">
+                                <button id="product-qty-minus" class="w-10 h-10 flex items-center justify-center text-magenta-600 hover:bg-magenta-50 rounded-l-full"><i class="fa-solid fa-minus text-xs"></i></button>
+                                <span id="product-qty" class="w-12 text-center font-semibold">1</span>
+                                <button id="product-qty-plus" class="w-10 h-10 flex items-center justify-center text-magenta-600 hover:bg-magenta-50 rounded-r-full"><i class="fa-solid fa-plus text-xs"></i></button>
+                            </div>
+                        </div>
+
+                        <!-- Botones -->
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button id="product-modal-add" class="flex-1 border-2 border-magenta-500 text-magenta-600 hover:bg-magenta-50 py-3.5 rounded-full font-semibold transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-bag-shopping"></i> Agregar al carrito
+                            </button>
+                            <button id="product-modal-buy" class="flex-1 bg-magenta-600 hover:bg-magenta-700 text-white py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i> Comprar ahora
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <p id="product-modal-desc" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
-                <div class="bg-magenta-50 rounded-xl p-4 mb-6">
-                    <p class="text-xs font-semibold text-magenta-700 uppercase tracking-wide mb-1"><i class="fa-solid fa-circle-info mr-1"></i> Detalles</p>
-                    <p id="product-modal-detail" class="text-sm text-gray-600"></p>
+
+                <!-- ===== Te puede interesar ===== -->
+                <div class="mt-10 pt-8 border-t border-magenta-100">
+                    <h4 class="text-center text-magenta-600 font-serif text-xl font-bold mb-6">TE PUEDE INTERESAR</h4>
+                    <div id="product-related" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4"></div>
                 </div>
-                <button id="product-modal-add" class="w-full bg-magenta-600 hover:bg-magenta-700 text-white py-3.5 rounded-full font-semibold shadow-lg shadow-magenta-200 transition flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-bag-shopping"></i> Añadir al carrito
-                </button>
             </div>
         </div>
     </div>
@@ -1709,11 +1777,9 @@
         });
 
         /* =========================================================
-           MODAL DE DETALLE DE PRODUCTO (Quick View)
+           MODAL DE DETALLE DE PRODUCTO (galería + zoom + relacionados)
         ========================================================= */
         const productModal = document.getElementById('product-modal');
-        const pmImg = document.getElementById('product-modal-img');
-        const pmCat = document.getElementById('product-modal-cat');
         const pmName = document.getElementById('product-modal-name');
         const pmPrice = document.getElementById('product-modal-price');
         const pmOld = document.getElementById('product-modal-old');
@@ -1721,18 +1787,92 @@
         const pmDesc = document.getElementById('product-modal-desc');
         const pmDetail = document.getElementById('product-modal-detail');
         const pmAdd = document.getElementById('product-modal-add');
+        const pmBuy = document.getElementById('product-modal-buy');
+        const pmBreadcrumb = document.getElementById('product-modal-breadcrumb');
+        const pmThumbs = document.getElementById('product-thumbs');
+        const pmStage = document.getElementById('product-stage');
+        const pmStageImg = document.getElementById('product-stage-img');
+        const pmStageIcon = document.getElementById('product-stage-icon');
+        const pmQtyEl = document.getElementById('product-qty');
+        const pmRelated = document.getElementById('product-related');
         let currentProductId = null;
+        let pmQty = 1;
+        let pmImages = [];   // lista de vistas (foto o ícono) del producto actual
+        let pmIndex = 0;
+
+        /* Devuelve las "vistas" (imágenes) de un producto.
+           Usa p.images (array) si existe; si no, una sola vista con el ícono. */
+        function productViews(p) {
+            if (Array.isArray(p.images) && p.images.length) {
+                return p.images.map((src) => ({ type: 'img', src }));
+            }
+            if (p.image) return [{ type: 'img', src: p.image }];
+            return [{ type: 'icon' }];
+        }
+
+        /* Pinta la vista activa en el escenario principal */
+        function renderStage() {
+            const p = byId(currentProductId);
+            const view = pmImages[pmIndex];
+            if (view.type === 'img') {
+                pmStageImg.src = view.src;
+                pmStageImg.alt = p.name;
+                pmStageImg.classList.remove('hidden');
+                pmStageIcon.classList.add('hidden');
+                pmStage.classList.remove('text-white');
+                pmStage.style.background = '#fdf2f8';
+            } else {
+                pmStageImg.classList.add('hidden');
+                pmStageIcon.classList.remove('hidden');
+                pmStageIcon.innerHTML = `<i class="fa-solid ${p.icon}"></i>`;
+                pmStage.className = pmStage.className.replace(/bg-\S+/g, '');
+                pmStage.style.background = '';
+                pmStage.classList.add('bg-gradient-to-br', ...p.grad.split(' '));
+            }
+            // Marcar miniatura activa
+            [...pmThumbs.children].forEach((t, i) =>
+                t.classList.toggle('ring-magenta-500', i === pmIndex)
+            );
+        }
+
+        function renderThumbs() {
+            const p = byId(currentProductId);
+            pmThumbs.innerHTML = pmImages
+                .map((v, i) => {
+                    const inner = v.type === 'img'
+                        ? `<img src="${v.src}" alt="" class="w-full h-full object-contain" />`
+                        : `<div class="w-full h-full flex items-center justify-center text-white text-xl bg-gradient-to-br ${p.grad}"><i class="fa-solid ${p.icon}"></i></div>`;
+                    return `<button class="product-thumb w-14 h-14 rounded-xl overflow-hidden bg-magenta-50 ring-2 ${i === pmIndex ? 'ring-magenta-500' : 'ring-transparent'} hover:ring-magenta-300 transition" data-i="${i}">${inner}</button>`;
+                })
+                .join('');
+            // Ocultar miniaturas si solo hay una vista
+            pmThumbs.style.display = pmImages.length > 1 ? 'flex' : 'none';
+        }
+
+        function stageGo(i) {
+            pmIndex = (i + pmImages.length) % pmImages.length;
+            renderStage();
+        }
 
         function openProductModal(id) {
             const p = byId(id);
             if (!p) return;
             currentProductId = id;
+            pmQty = 1;
+            pmQtyEl.textContent = '1';
+            pmImages = productViews(p);
+            pmIndex = 0;
 
-            // Reset gradientes previos en la imagen
-            pmImg.className = `sm:w-1/2 h-56 sm:h-auto flex items-center justify-center text-white text-7xl shrink-0 bg-gradient-to-br ${p.grad}`;
-            pmImg.innerHTML = `<i class="fa-solid ${p.icon}"></i>`;
+            // Breadcrumb
+            const parts = ['Inicio', ...p.category.split('·').map((s) => s.trim()), p.name];
+            pmBreadcrumb.innerHTML = parts
+                .map((t, i) =>
+                    i === parts.length - 1
+                        ? `<span class="text-magenta-600 font-medium">${t}</span>`
+                        : `<span>${t}</span><i class="fa-solid fa-angle-right text-[9px] mx-1"></i>`
+                )
+                .join('');
 
-            pmCat.textContent = p.category;
             pmName.textContent = p.name;
             pmPrice.textContent = money(p.price);
             pmOld.textContent = p.oldPrice ? money(p.oldPrice) : '';
@@ -1741,14 +1881,19 @@
             pmDesc.textContent = p.desc || '';
             pmDetail.textContent = p.detail || '';
 
+            renderThumbs();
+            renderStage();
+            renderRelated(p);
+
             productModal.classList.remove('hidden');
             productModal.classList.add('flex');
             document.body.style.overflow = 'hidden';
+            productModal.scrollTop = 0;
         }
+
         function closeProductModal() {
             productModal.classList.add('hidden');
             productModal.classList.remove('flex');
-            // Si la revista sigue abierta, mantener scroll bloqueado
             if (catalogModal.classList.contains('hidden')) {
                 document.body.style.overflow = '';
             } else {
@@ -1756,14 +1901,85 @@
             }
         }
 
+        /* Productos relacionados (misma categoría principal, distinto id) */
+        function renderRelated(p) {
+            const mainCat = p.category.split('·')[0].trim();
+            let rel = products.filter(
+                (x) => x.id !== p.id && x.category.split('·')[0].trim() === mainCat
+            );
+            if (rel.length < 4) {
+                rel = rel.concat(products.filter((x) => x.id !== p.id && !rel.includes(x)));
+            }
+            rel = rel.slice(0, 4);
+            pmRelated.innerHTML = rel
+                .map(
+                    (r) => `
+                    <button class="related-item group text-left bg-white rounded-2xl overflow-hidden border border-magenta-100 hover:shadow-lg transition" data-id="${r.id}">
+                        <div class="h-28 bg-gradient-to-br ${r.grad} flex items-center justify-center text-white text-3xl relative">
+                            ${r.image ? `<img src="${r.image}" alt="${r.name}" class="w-full h-full object-contain" />` : `<i class="fa-solid ${r.icon}"></i>`}
+                            ${r.discount ? `<span class="absolute top-2 left-2 bg-magenta-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">-${r.discount}%</span>` : ''}
+                        </div>
+                        <div class="p-3">
+                            <p class="text-xs font-medium text-gray-800 leading-snug line-clamp-2 mb-1 group-hover:text-magenta-600 transition">${r.name}</p>
+                            <span class="text-sm font-bold text-magenta-600">${money(r.price)}</span>
+                        </div>
+                    </button>`
+                )
+                .join('');
+        }
+
+        /* ---- Zoom con lupa (al pasar el mouse sobre la imagen) ---- */
+        pmStage.addEventListener('mousemove', (e) => {
+            if (pmImages[pmIndex].type !== 'img') return; // solo con foto real
+            const rect = pmStage.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width) * 100;
+            const y = ((e.clientY - rect.top) / rect.height) * 100;
+            pmStageImg.style.transformOrigin = `${x}% ${y}%`;
+            pmStageImg.style.transform = 'scale(2.2)';
+        });
+        pmStage.addEventListener('mouseleave', () => {
+            pmStageImg.style.transform = 'scale(1)';
+        });
+
+        /* ---- Flechas y miniaturas ---- */
+        document.getElementById('product-prev').addEventListener('click', (e) => { e.stopPropagation(); stageGo(pmIndex - 1); });
+        document.getElementById('product-next').addEventListener('click', (e) => { e.stopPropagation(); stageGo(pmIndex + 1); });
+        pmThumbs.addEventListener('click', (e) => {
+            const t = e.target.closest('.product-thumb');
+            if (t) stageGo(Number(t.dataset.i));
+        });
+
+        /* ---- Cantidad ---- */
+        document.getElementById('product-qty-minus').addEventListener('click', () => {
+            pmQty = Math.max(1, pmQty - 1); pmQtyEl.textContent = pmQty;
+        });
+        document.getElementById('product-qty-plus').addEventListener('click', () => {
+            pmQty += 1; pmQtyEl.textContent = pmQty;
+        });
+
+        /* ---- Productos relacionados: abrir su detalle ---- */
+        pmRelated.addEventListener('click', (e) => {
+            const r = e.target.closest('.related-item');
+            if (r) openProductModal(Number(r.dataset.id));
+        });
+
         document.getElementById('product-close').addEventListener('click', closeProductModal);
         productModal.addEventListener('click', (e) => { if (e.target === productModal) closeProductModal(); });
+
+        /* Agregar al carrito (respeta la cantidad elegida) */
         pmAdd.addEventListener('click', () => {
-            if (currentProductId != null) {
-                addToCart(currentProductId);
-                closeProductModal();
-                openCart();
-            }
+            if (currentProductId == null) return;
+            for (let i = 0; i < pmQty; i++) addToCart(currentProductId);
+            closeProductModal();
+            openCart();
+        });
+
+        /* Comprar ahora → WhatsApp directo con este producto */
+        pmBuy.addEventListener('click', () => {
+            if (currentProductId == null) return;
+            const p = byId(currentProductId);
+            const txt = `¡Hola Ramos y Detalles! 💖 Quiero comprar:%0A%0A${encodeURIComponent(`${pmQty} x ${p.name} — ${money(p.price * pmQty)}`)}%0A%0A${encodeURIComponent('¿Me ayudan a finalizar la compra? 😊')}`;
+            window.open(`https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${txt}`, '_blank');
         });
 
         /* Cerrar con tecla Escape (en orden lógico) */
