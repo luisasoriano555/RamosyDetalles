@@ -1004,10 +1004,16 @@
                     <div>
                         <h3 id="product-modal-name" class="font-serif text-2xl sm:text-3xl font-bold text-gray-800 mb-2"></h3>
 
-                        <!-- Estrellas -->
+                        <!-- Estrellas (calificables) -->
                         <div class="flex items-center gap-2 mb-4">
-                            <span class="text-amber-400 text-sm"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i></span>
-                            <span class="text-xs text-gray-400">(0) Comentarios de clientes</span>
+                            <span id="product-stars" class="text-lg flex gap-0.5" title="Califica este producto">
+                                <button class="product-star text-gray-300 hover:text-amber-400 transition" data-v="1" aria-label="1 estrella"><i class="fa-solid fa-star"></i></button>
+                                <button class="product-star text-gray-300 hover:text-amber-400 transition" data-v="2" aria-label="2 estrellas"><i class="fa-solid fa-star"></i></button>
+                                <button class="product-star text-gray-300 hover:text-amber-400 transition" data-v="3" aria-label="3 estrellas"><i class="fa-solid fa-star"></i></button>
+                                <button class="product-star text-gray-300 hover:text-amber-400 transition" data-v="4" aria-label="4 estrellas"><i class="fa-solid fa-star"></i></button>
+                                <button class="product-star text-gray-300 hover:text-amber-400 transition" data-v="5" aria-label="5 estrellas"><i class="fa-solid fa-star"></i></button>
+                            </span>
+                            <span id="product-rating-label" class="text-xs text-gray-400">Sé el primero en calificar</span>
                         </div>
 
                         <p id="product-modal-desc" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
@@ -1077,9 +1083,9 @@
                 icon: 'fa-wand-sparkles',
                 grad: 'from-magenta-300 to-magenta-500',
                 images: [
-                    'images/forever-gloss-kit.jpg',
-                    'images/forever-gloss-tonos.jpg',
-                    'images/forever-gloss-individual.jpg',
+                    'images/forever-gloss-1.webp',
+                    'images/forever-gloss-2.webp',
+                    'images/forever-gloss-3.webp',
                 ],
                 group: 'best',
             },
@@ -1809,6 +1815,47 @@
         let pmImages = [];   // lista de vistas (foto o ícono) del producto actual
         let pmIndex = 0;
 
+        /* ---- Calificación por estrellas (guardada por producto) ---- */
+        const RATINGS_KEY = 'ryd_ratings';
+        const getRatings = () => JSON.parse(localStorage.getItem(RATINGS_KEY) || '{}');
+        const starBtns = () => [...document.querySelectorAll('.product-star')];
+        const ratingLabel = document.getElementById('product-rating-label');
+
+        function paintStars(value) {
+            starBtns().forEach((b) => {
+                const on = Number(b.dataset.v) <= value;
+                b.classList.toggle('text-amber-400', on);
+                b.classList.toggle('text-gray-300', !on);
+            });
+        }
+
+        function renderRating() {
+            const ratings = getRatings();
+            const mine = ratings[currentProductId];
+            if (mine) {
+                paintStars(mine);
+                ratingLabel.textContent = `Tu calificación: ${mine}/5 ⭐`;
+            } else {
+                paintStars(0);
+                ratingLabel.textContent = 'Sé el primero en calificar';
+            }
+        }
+
+        // Hover de estrellas: previsualiza
+        starBtns().forEach((b) => {
+            b.addEventListener('mouseenter', () => paintStars(Number(b.dataset.v)));
+            b.addEventListener('click', () => {
+                const v = Number(b.dataset.v);
+                const ratings = getRatings();
+                ratings[currentProductId] = v;
+                localStorage.setItem(RATINGS_KEY, JSON.stringify(ratings));
+                paintStars(v);
+                ratingLabel.textContent = `¡Gracias! Calificaste ${v}/5 ⭐`;
+                showToast('¡Gracias por tu calificación! 💖');
+            });
+        });
+        document.getElementById('product-stars').addEventListener('mouseleave', renderRating);
+
         /* Devuelve las "vistas" (imágenes) de un producto.
            Usa p.images (array) si existe; si no, una sola vista con el ícono. */
         function productViews(p) {
@@ -1892,6 +1939,7 @@
 
             renderThumbs();
             renderStage();
+            renderRating();
             renderRelated(p);
 
             productModal.classList.remove('hidden');
