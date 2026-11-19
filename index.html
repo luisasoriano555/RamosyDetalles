@@ -1069,15 +1069,18 @@
             {
                 id: 1,
                 type: 'beauty',
-                name: 'Labial Mate Líquido "Rosa Vino"',
+                name: 'Kit X 8 Forever Gloss Ref bg01',
                 category: 'Maquillaje · Labios',
-                desc: 'Labial líquido de acabado mate aterciopelado, larga duración hasta 12 horas. No reseca y no transfiere.',
-                detail: 'Tono: Rosa Vino · Contenido: 5 ml · Vegano · Cruelty free',
-                price: 39900,
-                oldPrice: 55900,
-                discount: 29,
+                desc: '¡Aquí están los esenciales para tus labios! Kit de 8 glosses Forever Gloss en tonos variados, acabado brillante e hidratante.',
+                detail: 'Contenido: 8 tonos · Acabado gloss hidratante · Unidad de medida: Único',
+                price: 21000,
                 icon: 'fa-wand-sparkles',
                 grad: 'from-magenta-300 to-magenta-500',
+                images: [
+                    'images/forever-gloss-kit.jpg',
+                    'images/forever-gloss-tonos.jpg',
+                    'images/forever-gloss-individual.jpg',
+                ],
                 group: 'best',
             },
             {
@@ -1251,9 +1254,15 @@
             return `
             <article class="product-card group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition flex flex-col">
                 <div class="relative">
-                    <div class="product-img-wrap view-product h-48 sm:h-56 bg-gradient-to-br ${p.grad} flex items-center justify-center cursor-pointer" data-id="${p.id}" title="Ver detalle">
-                        <img src="data:image/svg+xml;utf8,${encodeURIComponent(svgIcon(p.icon))}" alt="${p.name}" class="w-24 h-24 opacity-90 pointer-events-none" />
-                    </div>
+                    ${(p.images && p.images.length) || p.image
+                        ? `<div class="product-img-wrap view-product h-48 sm:h-56 bg-white flex items-center justify-center cursor-pointer p-3" data-id="${p.id}" title="Ver detalle">
+                               <img src="${p.image || p.images[0]}" alt="${p.name}" class="max-w-full max-h-full object-contain pointer-events-none"
+                                    onerror="this.src='data:image/svg+xml;utf8,${encodeURIComponent(svgIcon())}';this.classList.add('w-24','h-24','opacity-90');this.parentElement.classList.remove('bg-white');this.parentElement.classList.add('bg-gradient-to-br','${p.grad.split(' ')[0]}','${p.grad.split(' ')[1]}');" />
+                           </div>`
+                        : `<div class="product-img-wrap view-product h-48 sm:h-56 bg-gradient-to-br ${p.grad} flex items-center justify-center cursor-pointer" data-id="${p.id}" title="Ver detalle">
+                               <img src="data:image/svg+xml;utf8,${encodeURIComponent(svgIcon(p.icon))}" alt="${p.name}" class="w-24 h-24 opacity-90 pointer-events-none" />
+                           </div>`
+                    }
                     ${p.discount ? `<span class="absolute top-3 left-3 bg-magenta-600 text-white text-xs font-bold px-2.5 py-1 rounded-full">-${p.discount}%</span>` : ''}
                     <button class="fav-btn absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 text-magenta-500 flex items-center justify-center shadow hover:bg-magenta-500 hover:text-white transition" data-id="${p.id}" aria-label="Favorito">
                         <i class="fa-regular fa-heart"></i>
